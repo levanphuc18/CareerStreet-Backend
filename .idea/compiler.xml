@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="apigateway" />
+        <module name="job-service" />
+        <module name="candidate-service" />
+        <module name="employer-service" />
+        <module name="discovery-server" />
+        <module name="user-service" />
+        <module name="tech-service" />
+        <module name="file-service" />
+        <module name="admin-service" />
+        <module name="apply-service" />
+        <module name="notification-service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="admin-service" target="19" />
+      <module name="api-gateway" target="19" />
+      <module name="apigateway" target="19" />
+      <module name="apply-service" target="19" />
+      <module name="candidate-service" target="19" />
+      <module name="discovery-server" target="19" />
+      <module name="employer-service" target="19" />
+      <module name="file-service" target="19" />
+      <module name="job-service" target="19" />
+      <module name="notification-service" target="19" />
+      <module name="tech-service" target="19" />
+      <module name="user-service" target="19" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="admin-service" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
+      <module name="apigateway" options="-parameters" />
+      <module name="apply-service" options="-parameters" />
+      <module name="candidate-service" options="-parameters" />
+      <module name="discovery-server" options="-parameters" />
+      <module name="employer-service" options="-parameters" />
+      <module name="file-service" options="-parameters" />
+      <module name="job-service" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
+      <module name="tech-service" options="-parameters" />
+      <module name="user-service" options="-parameters" />
+    </option>
+  </component>
+</project>
