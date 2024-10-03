@@ -10,7 +10,6 @@ public class EmployerRequest {
     String address;
     boolean gender;
     String phone;
-    String email;
     String avatar;
     String username;
     String company;

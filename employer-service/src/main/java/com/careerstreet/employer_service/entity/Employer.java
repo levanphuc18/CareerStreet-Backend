@@ -41,9 +41,6 @@ public class Employer {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Column(name = "email", nullable = false)
-    private String email;
-
     @Column(name = "avatar", nullable = true)
     private String avatar;
 

@@ -128,6 +128,13 @@ public class GatewayConfig {
                         .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
                         //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))
                         .uri("lb://tech-service"))
+                // File route
+                .route("file-service", r->r.path(
+                                Constants.FILE_PREFIX+"/upload"
+                        ).and()
+                        .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
+                        //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))
+                        .uri("lb://file-service"))
 
 
                 .build();

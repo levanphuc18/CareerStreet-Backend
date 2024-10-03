@@ -6,11 +6,24 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class CandidateCvRequest {
-    String description;
+    String fullName;
+    String address;
+    String phone;
+    String email;
+    String school;
+    String language;
     String experience;
-    String link;
+    String title;
+    String currentSalary;
+    String preferenceSalary;
+    String level;
+    String positionType;
+    String workLocation;
+    String filePath;
+    MultipartFile file;
     Long candidate_id;
 }

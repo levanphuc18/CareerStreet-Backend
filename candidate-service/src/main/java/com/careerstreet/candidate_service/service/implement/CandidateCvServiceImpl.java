@@ -1,5 +1,6 @@
 package com.careerstreet.candidate_service.service.implement;
 
+import com.careerstreet.candidate_service.client.FileClient;
 import com.careerstreet.candidate_service.dto.ApiResponse;
 import com.careerstreet.candidate_service.dto.CandidateCvRequest;
 import com.careerstreet.candidate_service.dto.CandidateCvResponse;
@@ -12,9 +13,14 @@ import com.careerstreet.candidate_service.repository.CandidateRepository;
 import com.careerstreet.candidate_service.service.CandidateCvService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,26 +31,62 @@ public class CandidateCvServiceImpl implements CandidateCvService{
     private final CandidateCvRepository candidateCvRepository;
     private final CandidateRepository candidateRepository;
     private final ModelMapper modelMapper;
+    private final FileClient fileClient;
 
     @Override
-    public CandidateCvResponse createCv(CandidateCvRequest candidateCvRequest){
-        // Tìm candidate bằng username
+    public CandidateCvResponse createCv(CandidateCvRequest candidateCvRequest) {
+        // Tìm candidate bằng ID
         Candidate candidate = candidateRepository.findById(candidateCvRequest.getCandidate_id())
                 .orElseThrow(() -> new RuntimeException("Candidate not found"));
 
-        CandidateCv candidateCv = modelMapper.map(candidateCvRequest, CandidateCv.class);
+        // Tạo đối tượng CandidateCv mới
+        CandidateCv candidateCv = new CandidateCv();
 
-        // Gán Account cho Employer
+        // Map từng trường đơn giản từ CandidateCvRequest
+        candidateCv.setFullName(candidateCvRequest.getFullName());
+        candidateCv.setAddress(candidateCvRequest.getAddress());
+        candidateCv.setPhone(candidateCvRequest.getPhone());
+        candidateCv.setEmail(candidateCvRequest.getEmail());
+        candidateCv.setSchool(candidateCvRequest.getSchool());
+        candidateCv.setLanguage(candidateCvRequest.getLanguage());
+        candidateCv.setExperience(candidateCvRequest.getExperience());
+        candidateCv.setTitle(candidateCvRequest.getTitle());
+        candidateCv.setCurrentSalary(candidateCvRequest.getCurrentSalary());
+        candidateCv.setPreferenceSalary(candidateCvRequest.getPreferenceSalary());
+        candidateCv.setLevel(candidateCvRequest.getLevel());
+        candidateCv.setPositionType(candidateCvRequest.getPositionType());
+        candidateCv.setWorkLocation(candidateCvRequest.getWorkLocation());
+
+        // Xử lý MultipartFile (file)
+        if (candidateCvRequest.getFile() != null && !candidateCvRequest.getFile().isEmpty()) {
+            MultipartFile file = candidateCvRequest.getFile();
+            ResponseEntity<Map<String, Object>> uploadResponse = fileClient.uploadFile(file);
+
+            if (uploadResponse.getStatusCode().is2xxSuccessful()) {
+                Map<String, Object> uploadResult = uploadResponse.getBody();
+                String filePath = (String) uploadResult.get("secure_url");
+                candidateCv.setFilePath(filePath); // Đặt filePath cho CandidateCv
+            } else {
+                throw new RuntimeException("File upload failed with status: " + uploadResponse.getStatusCode());
+            }
+        }
+
         candidateCv.setCandidate(candidate);
 
+        // Lưu CandidateCv vào cơ sở dữ liệu
         candidateCv = candidateCvRepository.save(candidateCv);
 
+        // Chuyển đổi thực thể CandidateCv thành response DTO
         CandidateCvResponse candidateCvResponse = modelMapper.map(candidateCv, CandidateCvResponse.class);
-
-        // Set thêm username vào CandidateResponse
         candidateCvResponse.setCandidate_id(candidate.getCandidateId());
+
         return candidateCvResponse;
     }
+
+
+
+
+
 
     @Override
     public CandidateCvResponse updateCv(CandidateCvRequest candidateCvRequest, Long candidateCvId){

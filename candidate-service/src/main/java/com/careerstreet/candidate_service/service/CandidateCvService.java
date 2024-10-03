@@ -3,6 +3,7 @@ package com.careerstreet.candidate_service.service;
 import com.careerstreet.candidate_service.dto.CandidateCvRequest;
 import com.careerstreet.candidate_service.dto.CandidateCvResponse;
 import com.careerstreet.candidate_service.dto.CandidateRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

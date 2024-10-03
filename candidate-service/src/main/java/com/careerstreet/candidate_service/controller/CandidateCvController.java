@@ -5,8 +5,10 @@ import com.careerstreet.candidate_service.exception.GlobalCode;
 import com.careerstreet.candidate_service.service.CandidateCvService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,19 +19,27 @@ public class CandidateCvController {
     private final CandidateCvService candidateCvService;
 
     @PostMapping("create")
-    public ResponseEntity<ApiResponse<CandidateCvResponse>> createCv (@RequestBody CandidateCvRequest candidateCvRequest){
-        System.out.println(candidateCvRequest.getCandidate_id());
-        System.out.println(candidateCvRequest.getDescription());
-        System.out.println(candidateCvRequest.getExperience());
-        System.out.println(candidateCvRequest.getLink());
-        System.out.println(candidateCvRequest.getCandidate_id());
-        System.out.println(" Cb tao CV ung vien ");
+    public ResponseEntity<ApiResponse<CandidateCvResponse>> createCv(
+            @ModelAttribute CandidateCvRequest candidateCvRequest) { // Chú ý sử dụng @ModelAttribute
+
+        // In thông tin ra console để kiểm tra
+        System.out.println("ID ứng viên: " + candidateCvRequest.getCandidate_id());
+        System.out.println("Ngôn ngữ: " + candidateCvRequest.getLanguage());
+        System.out.println("Kinh nghiệm: " + candidateCvRequest.getExperience());
+
+        System.out.println("Bắt đầu tạo CV ứng viên...");
+
+        // Tạo CV thông qua service
         CandidateCvResponse candidateCvResponse = candidateCvService.createCv(candidateCvRequest);
 
-        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Tao cv ung vien thanh cong", candidateCvResponse);
-        System.out.println("Tao cv ung vien thanh cong rsp New");
+        // Tạo phản hồi API
+        ApiResponse<CandidateCvResponse> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Tạo CV ứng viên thành công", candidateCvResponse);
+        System.out.println("Tạo CV ứng viên thành công.");
+
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+
 
     @PutMapping("update/{id}")
     public ResponseEntity<ApiResponse<CandidateCvResponse>> updateCv (@RequestBody CandidateCvRequest candidateCvRequest, @PathVariable Long id){
