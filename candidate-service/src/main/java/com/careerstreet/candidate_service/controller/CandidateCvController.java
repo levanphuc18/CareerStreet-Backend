@@ -19,33 +19,36 @@ public class CandidateCvController {
     private final CandidateCvService candidateCvService;
 
     @PostMapping("create")
+//    @PostMapping(value = "create", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ApiResponse<CandidateCvResponse>> createCv(
-            @ModelAttribute CandidateCvRequest candidateCvRequest) { // Chú ý sử dụng @ModelAttribute
+            @RequestPart(name = "file",required = false) MultipartFile file,
+            @RequestPart(name = "data") CandidateCvRequest candidateCvRequest) { // Chú ý sử dụng @ModelAttribute
+        System.out.println("Thông tin ứng viên: " + candidateCvRequest);
 
-        // In thông tin ra console để kiểm tra
-        System.out.println("ID ứng viên: " + candidateCvRequest.getCandidate_id());
-        System.out.println("Ngôn ngữ: " + candidateCvRequest.getLanguage());
-        System.out.println("Kinh nghiệm: " + candidateCvRequest.getExperience());
+        // Xử lý file nếu cần
+        if (file != null) {
+            // Xử lý file (ví dụ: lưu vào thư mục, phân tích nội dung, v.v.)
+            System.out.println("File được gửi: " + file.getOriginalFilename());
+        }
 
         System.out.println("Bắt đầu tạo CV ứng viên...");
 
-        // Tạo CV thông qua service
-        CandidateCvResponse candidateCvResponse = candidateCvService.createCv(candidateCvRequest);
+        CandidateCvResponse candidateCvResponse = candidateCvService.createCv(candidateCvRequest,file);
 
         // Tạo phản hồi API
-        ApiResponse<CandidateCvResponse> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Tạo CV ứng viên thành công", candidateCvResponse);
-        System.out.println("Tạo CV ứng viên thành công.");
+        ApiResponse<CandidateCvResponse> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Tạo hồ sơ ứng viên thành công", candidateCvResponse);
+        System.out.println("Tạo hồ sơ ứng viên thành công.");
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-
-
     @PutMapping("update/{id}")
-    public ResponseEntity<ApiResponse<CandidateCvResponse>> updateCv (@RequestBody CandidateCvRequest candidateCvRequest, @PathVariable Long id){
+    public ResponseEntity<ApiResponse<CandidateCvResponse>> updateCv (
+            @RequestPart(name = "file",required = false) MultipartFile file,
+            @RequestPart(name = "data") CandidateCvRequest candidateCvRequest,
+            @PathVariable Long id){
         System.out.println(" Cb cap nhat CV ung vien ");
-//        candidateCvRequest.setCandidate_id(candidateCvRequest.getCandidate_id());
-        CandidateCvResponse candidateCvResponse = candidateCvService.updateCv(candidateCvRequest, id);
+        CandidateCvResponse candidateCvResponse = candidateCvService.updateCv(candidateCvRequest,file, id);
 
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Cap nhat cv ung vien thanh cong", candidateCvResponse);
         System.out.println("Cap nhat cv ung vien thanh cong rsp New");
@@ -56,7 +59,6 @@ public class CandidateCvController {
     public ResponseEntity<ApiResponse<Void>> deleteCv(@PathVariable Long id) {
         // Log khi xóa CV
         System.out.println("Xóa CV với ID: " + id);
-
         // Gọi service để xóa CV
         candidateCvService.deleteCv(id);
 

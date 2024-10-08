@@ -34,7 +34,7 @@ public class CandidateCvServiceImpl implements CandidateCvService{
     private final FileClient fileClient;
 
     @Override
-    public CandidateCvResponse createCv(CandidateCvRequest candidateCvRequest) {
+    public CandidateCvResponse createCv(CandidateCvRequest candidateCvRequest, MultipartFile file) {
         // Tìm candidate bằng ID
         Candidate candidate = candidateRepository.findById(candidateCvRequest.getCandidate_id())
                 .orElseThrow(() -> new RuntimeException("Candidate not found"));
@@ -58,9 +58,10 @@ public class CandidateCvServiceImpl implements CandidateCvService{
         candidateCv.setWorkLocation(candidateCvRequest.getWorkLocation());
 
         // Xử lý MultipartFile (file)
-        if (candidateCvRequest.getFile() != null && !candidateCvRequest.getFile().isEmpty()) {
-            MultipartFile file = candidateCvRequest.getFile();
-            ResponseEntity<Map<String, Object>> uploadResponse = fileClient.uploadFile(file);
+        System.out.println(file.getOriginalFilename() + " FileName");
+        if (file != null && !file.isEmpty()) {
+            MultipartFile fileTmp = file;
+            ResponseEntity<Map<String, Object>> uploadResponse = fileClient.uploadFile(fileTmp);
 
             if (uploadResponse.getStatusCode().is2xxSuccessful()) {
                 Map<String, Object> uploadResult = uploadResponse.getBody();
@@ -83,23 +84,51 @@ public class CandidateCvServiceImpl implements CandidateCvService{
         return candidateCvResponse;
     }
 
-
-
-
-
-
     @Override
-    public CandidateCvResponse updateCv(CandidateCvRequest candidateCvRequest, Long candidateCvId){
+    public CandidateCvResponse updateCv(CandidateCvRequest candidateCvRequest, MultipartFile file, Long candidateCvId){
         CandidateCv candidateCv = candidateCvRepository.findById(candidateCvId).orElseThrow(
                 () -> new EntityNotFoundException("Candidate not found with id: " + candidateCvId, GlobalCode.ERROR_ENTITY_NOT_FOUND)
         );
+        // Tìm candidate bằng ID
+        Candidate candidate = candidateRepository.findById(candidateCvRequest.getCandidate_id())
+                .orElseThrow(() -> new RuntimeException("Candidate not found"));
 
-        modelMapper.map(candidateCvRequest, candidateCv);
+        // Map từng trường đơn giản từ CandidateCvRequest
+        candidateCv.setFullName(candidateCvRequest.getFullName());
+        candidateCv.setAddress(candidateCvRequest.getAddress());
+        candidateCv.setPhone(candidateCvRequest.getPhone());
+        candidateCv.setEmail(candidateCvRequest.getEmail());
+        candidateCv.setSchool(candidateCvRequest.getSchool());
+        candidateCv.setLanguage(candidateCvRequest.getLanguage());
+        candidateCv.setExperience(candidateCvRequest.getExperience());
+        candidateCv.setTitle(candidateCvRequest.getTitle());
+        candidateCv.setCurrentSalary(candidateCvRequest.getCurrentSalary());
+        candidateCv.setPreferenceSalary(candidateCvRequest.getPreferenceSalary());
+        candidateCv.setLevel(candidateCvRequest.getLevel());
+        candidateCv.setPositionType(candidateCvRequest.getPositionType());
+        candidateCv.setWorkLocation(candidateCvRequest.getWorkLocation());
+
+        // Xử lý MultipartFile (file)
+        System.out.println(file.getOriginalFilename() + " FileName");
+        if (file != null && !file.isEmpty()) {
+            MultipartFile fileTmp = file;
+            ResponseEntity<Map<String, Object>> uploadResponse = fileClient.uploadFile(fileTmp);
+
+            if (uploadResponse.getStatusCode().is2xxSuccessful()) {
+                Map<String, Object> uploadResult = uploadResponse.getBody();
+                String filePath = (String) uploadResult.get("secure_url");
+                candidateCv.setFilePath(filePath); // Đặt filePath cho CandidateCv
+            } else {
+                throw new RuntimeException("File upload failed with status: " + uploadResponse.getStatusCode());
+            }
+        }
+
+        candidateCv.setCandidate(candidate);
 
         candidateCv = candidateCvRepository.save(candidateCv);
 
         CandidateCvResponse candidateCvResponse = modelMapper.map(candidateCv, CandidateCvResponse.class);
-        candidateCvResponse.setCandidate_id(candidateCv.getCandidate().getCandidateId());
+        candidateCvResponse.setCandidate_id(candidate.getCandidateId());
 
         return candidateCvResponse;
     }

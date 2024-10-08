@@ -8,9 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface CandidateCvService {
-    CandidateCvResponse createCv(CandidateCvRequest candidateCvRequest);
+    CandidateCvResponse createCv(CandidateCvRequest candidateCvRequest, MultipartFile file);
 
-    CandidateCvResponse updateCv(CandidateCvRequest candidateCvRequest, Long candidateCvId);
+    CandidateCvResponse updateCv(CandidateCvRequest candidateCvRequest, MultipartFile file, Long candidateCvId);
 
     CandidateCvResponse getCvById(Long candidateCvId);
 

@@ -23,7 +23,5 @@ public class CandidateCvRequest {
     String level;
     String positionType;
     String workLocation;
-    String filePath;
-    MultipartFile file;
     Long candidate_id;
 }
