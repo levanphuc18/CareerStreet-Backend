@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotificationMessage {
+public class ApiResponse<T> {
+    private String code;
     private String message;
-    private String status;
+    private T data;
 }

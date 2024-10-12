@@ -18,7 +18,7 @@ public class JobResponse {
     String requirement;
     String salary;
     String address;
-    String workType;
+    String positionType;
     LocalDate postingDate;
     LocalDate deadline;
     Long techDetailId;

@@ -1,5 +1,6 @@
 package com.careerstreet.user_service.service.implement;
 
+import com.careerstreet.user_service.client.NotificationClient;
 import com.careerstreet.user_service.dto.*;
 import com.careerstreet.user_service.entity.Account;
 import com.careerstreet.user_service.entity.Role;
@@ -25,6 +26,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
 
     private final CandidateClient candidateClient;
+    private final NotificationClient notificationClient;
 
 
 
@@ -36,6 +38,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountResponse registerAccount(RegisterRequest registerRequest) {
+        // set các giá trị notificationRequest
+        NotificationRequest notificationRequest = new NotificationRequest();
+        notificationRequest.setRecipient(registerRequest.getEmail());
+        notificationRequest.setSubject("Xác nhận tạo tài khoản");
+        notificationRequest.setMsgBody("Chúc mừng bạn đã tạo tài khoản thành công trên website tuyển dụng việc làm CarrerStreet");
+
         boolean checkUsername = accountRepository.existsByUsername(registerRequest.getUsername());
         Role role = roleRepository.findById(registerRequest.getRole()).orElseThrow(
                 () -> new EntityNotFoundException("Chức vụ không tồn tại", GlobalCode.ERROR_ENTITY_NOT_FOUND));
@@ -50,6 +58,9 @@ public class AccountServiceImpl implements AccountService {
         account.setEmail(registerRequest.getEmail());
         account.setActive(true);
         account = accountRepository.save(account);
+
+        // gọi api client gửi mail
+        ApiResponse<NotificationResponse> apiResponse = notificationClient.createNotification(notificationRequest).getBody();
         return convertToAccountResponse(account);
     }
 

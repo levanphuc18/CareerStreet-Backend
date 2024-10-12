@@ -121,7 +121,7 @@ public class JobServiceImpl implements JobService {
                     jobResponse.setRequirement(job.getRequirement());
                     jobResponse.setSalary(job.getSalary());
                     jobResponse.setAddress(job.getAddress());
-                    jobResponse.setWorkType(job.getWorkType());
+                    jobResponse.setPositionType(job.getPositionType());
                     jobResponse.setPostingDate(job.getPostingDate());
                     jobResponse.setDeadline(job.getDeadline());
                     jobResponse.setTechDetailId(job.getTechDetailId());

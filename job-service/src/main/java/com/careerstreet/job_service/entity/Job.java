@@ -40,8 +40,8 @@ public class Job {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "workType")
-    private String workType;
+    @Column(name = "positionType")
+    private String positionType;
 
     @Column(name = "posting_date")
     private LocalDate postingDate;

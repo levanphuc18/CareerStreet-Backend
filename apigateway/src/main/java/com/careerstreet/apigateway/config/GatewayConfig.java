@@ -135,7 +135,13 @@ public class GatewayConfig {
                         .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
                         //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))
                         .uri("lb://file-service"))
-
+                // Notification route
+                .route("notification-service", r->r.path(
+                                Constants.NOTIFICATION_PREFIX+"/create"
+                        ).and()
+                        .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
+                        //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))
+                        .uri("lb://notification-service"))
 
                 .build();
     }
