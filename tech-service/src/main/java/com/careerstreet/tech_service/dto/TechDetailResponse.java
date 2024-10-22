@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class TechDetailResponse {
-    String techId;
-    String jobId;
+    Long jobId;
+    List<Long> techIds;
 }

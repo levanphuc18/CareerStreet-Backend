@@ -22,8 +22,8 @@ public class JobController {
     public ResponseEntity<ApiResponse<JobResponse>> createJob(@RequestBody JobRequest jobRequest){
         System.out.println("CB tao job");
         JobResponse jobResponse = jobService.createJob(jobRequest);
-        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Tao job thanh cong", jobResponse);
-        System.out.println("tao job thanh cong");
+        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Tạo công việc thành công", jobResponse);
+        System.out.println("tạo công việc thành công");
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
@@ -31,7 +31,7 @@ public class JobController {
     public ResponseEntity<ApiResponse<JobResponse>> updateJob(@RequestBody JobRequest jobRequest, @PathVariable Long jobId){
         System.out.println("update job");
         JobResponse jobResponse = jobService.updateJob(jobRequest, jobId);
-        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "cap nhat thanh cong", jobResponse);
+        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Cập nhật công việc thành công", jobResponse);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
@@ -40,9 +40,10 @@ public class JobController {
         // Log khi lấy thông tin CV
         System.out.println("Lấy thông tin Job với ID: " + id);
 
+        // +1 views
+        jobService.increaseJobViews(id);
         // Gọi service để lấy CV
         JobResponse jobResponse = jobService.getJobById(id);
-
         // Tạo response với thông báo thành công
         ApiResponse<JobResponse> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Lấy thông tin Job thành công", jobResponse);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
@@ -72,6 +73,19 @@ public class JobController {
 
         // Tạo response với thông báo thành công
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sach tat ca job", list);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("getall/status/{status}")
+    public ResponseEntity<ApiResponse<List<JobResponse>>> getAllJobByStatus(@PathVariable Long status) {
+        // Log khi lấy thông tin CV
+        System.out.println("Lấy tat ca thông tin job bang status: " + status);
+
+        // Gọi service để lấy CV
+        List<JobResponse> list = jobService.getAllJobByStatus(status);
+
+        // Tạo response với thông báo thành công
+        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sach tat ca job thuộc status", list);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }

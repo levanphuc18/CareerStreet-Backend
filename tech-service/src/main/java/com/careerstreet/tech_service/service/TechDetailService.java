@@ -2,8 +2,11 @@ package com.careerstreet.tech_service.service;
 
 import com.careerstreet.tech_service.dto.TechDetailRequest;
 import com.careerstreet.tech_service.dto.TechDetailResponse;
+import com.careerstreet.tech_service.entity.Tech;
+
+import java.util.List;
 
 public interface TechDetailService {
-//    TechDetailResponse createTechDetail(TechDetailRequest techDetailRequest);
-
+    void saveTechDetailsForJob(TechDetailRequest techDetailRequest);
+    List<Tech> getTechByJobId(Long jobId);
 }

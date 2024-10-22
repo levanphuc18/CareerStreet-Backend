@@ -2,8 +2,10 @@ package com.careerstreet.tech_service.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class TechDetailRequest {
-    String techId;
-    String jobId;
+    Long jobId;
+    List<Long> techIds;
 }

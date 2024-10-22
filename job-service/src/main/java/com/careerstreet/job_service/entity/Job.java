@@ -24,33 +24,77 @@ public class Job {
     @Column(name = "job_id")
     private Long jobId;
 
+    @Column(name = "company_name")
+    private String companyName;
+
+    @Column(name = "number_of_employees")
+    private Long numberOfEmployees;
+
+    @Column(name = "company_website")
+    private String companyWebsite;
+
+    @Lob
+    @Column(name = "company_overview", length = 5000)
+    private String companyOverview;
+
     @Column(name = "title")
     private String title;
 
+    @Column(name = "location", length = 500) // Có thể thay đổi nếu cần
+    private String jobLocation;
+
+    @Column(name = "salary")
+    private Long salary;
+
+    @Lob
     @Column(name = "description", length = 5000)
-    private String description;
+    private String jobDescription;
 
     @Lob
     @Column(name = "requirement", length = 5000)
-    private String requirement;
+    private String jobRequirements;
 
-    @Column(name = "salary")
-    private String salary;
+    @Column(name = "benefits", length = 5000)
+    private String benefits;
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "education_level")
+    private String educationLevel;
 
-    @Column(name = "positionType")
-    private String positionType;
+//    @Column(name = "experience_level")
+//    private String experienceLevel;
+
+    @Column(name = "job_rank")
+    private String jobRank;
+
+    @Column(name = "position_type")
+    private String jobType;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "contact_person")
+    private String contactPerson;
+
+    @Column(name = "contact_phone")
+    private String contactPhone;
+
+    @Column(name = "contact_email")
+    private String contactEmail;
+
+    @Column(name = "contact_address", length = 500)
+    private String contactAddress;
 
     @Column(name = "posting_date")
     private LocalDate postingDate;
 
-    @Column(name = "deadline")
-    private LocalDate deadline;
+    @Column(name = "expiration_date")
+    private LocalDate expirationDate;
 
-    @Column(name = "techDetail_id")
-    private Long techDetailId;
+    @Column(name = "status")
+    private Long status;
+
+    @Column(name = "views", columnDefinition = "bigint default 0")
+    private Long views;
 
     @Column(name = "employer_id")
     private Long employerId;

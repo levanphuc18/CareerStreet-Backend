@@ -8,10 +8,9 @@ import com.careerstreet.tech_service.service.TechService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +23,18 @@ public class TechController {
         System.out.println("CB tao tech");
         TechResponse techResponse = techService.createTech(techRequest);
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "tao tech thanh cong", techResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("getall")
+    public ResponseEntity<ApiResponse<TechResponse>> getTech(){
+        // Log khi lấy thông tin CV
+        System.out.println("Lấy tat ca thông tin job ");
+        // Gọi service để lấy CV
+        List<TechResponse> list = techService.getAllTech();
+
+        // Tạo response với thông báo thành công
+        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sach tat ca tech", list);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }

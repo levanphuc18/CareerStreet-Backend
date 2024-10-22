@@ -15,4 +15,6 @@ public interface JobService {
     List<JobResponse> getJobByEmployerId(Long employerId);
 
     List<JobResponse> getAllJob();
+    List<JobResponse> getAllJobByStatus(Long status);
+    void increaseJobViews(Long jobId);
 }
