@@ -6,8 +6,8 @@ import java.time.LocalDate;
 
 @Data
 public class ApplyRequest {
-    String candidateCvId;
+    Long candidateCvId;
     String jobId;
-    LocalDate date;
+    String coverLetter;
     int status;
 }

@@ -13,8 +13,9 @@ import java.time.LocalDate;
 @Builder
 public class ApplyResponse {
     Long applyId;
-    String candidateCvId;
-    String jobId;
+    Long candidateCvId;
+    Long jobId;
+    String coverLetter;
     LocalDate date;
     int status;
 }

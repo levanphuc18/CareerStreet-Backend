@@ -1,7 +1,10 @@
 package com.careerstreet.apply_service.service.implement;
 
+import com.careerstreet.apply_service.client.CandidateCvClient;
+import com.careerstreet.apply_service.dto.ApiResponse;
 import com.careerstreet.apply_service.dto.ApplyRequest;
 import com.careerstreet.apply_service.dto.ApplyResponse;
+import com.careerstreet.apply_service.dto.CandidateCvResponse;
 import com.careerstreet.apply_service.entity.Apply;
 import com.careerstreet.apply_service.exception.EntityNotFoundException;
 import com.careerstreet.apply_service.exception.GlobalCode;
@@ -11,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +23,7 @@ import java.util.stream.Collectors;
 public class ApplyServiceImpl implements ApplyService {
     private final ModelMapper modelMapper;
     private final ApplyRepository applyRepository;
+    private final CandidateCvClient candidateCvClient;
 
     @Override
     public ApplyResponse createApply(ApplyRequest applyRequest){
@@ -55,4 +60,25 @@ public class ApplyServiceImpl implements ApplyService {
                 .collect(Collectors.toList());
         return list;
     }
+
+    @Override
+    public List<Apply> getAppliesByCandidateId(Long candidateId) {
+        // Gọi FeignClient để lấy danh sách CandidateCv dựa trên candidateId
+        ApiResponse<List<CandidateCvResponse>> response = candidateCvClient.getCandidateCvBycandidateId(candidateId);
+
+        // Kiểm tra mã trạng thái và lấy danh sách CandidateCv từ ApiResponse
+        List<CandidateCvResponse> candidateCvs = response.getData(); // Lấy danh sách từ trường data
+
+        // Tạo danh sách để chứa kết quả Apply
+        List<Apply> applyList = new ArrayList<>();
+
+        // Duyệt qua danh sách CandidateCv để lấy apply cho từng candidateCvId
+        for (CandidateCvResponse candidateCv : candidateCvs) {
+            List<Apply> applies = applyRepository.findByCandidateCvId(candidateCv.getCandidateCvId());
+            applyList.addAll(applies);
+        }
+        return applyList;
+    }
+
+
 }

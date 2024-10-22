@@ -3,6 +3,7 @@ package com.careerstreet.apply_service.controller;
 import com.careerstreet.apply_service.dto.ApiResponse;
 import com.careerstreet.apply_service.dto.ApplyRequest;
 import com.careerstreet.apply_service.dto.ApplyResponse;
+import com.careerstreet.apply_service.entity.Apply;
 import com.careerstreet.apply_service.exception.GlobalCode;
 //import com.careerstreet.apply_service.kafka.producer.ApplyKafkaProducer;
 import com.careerstreet.apply_service.service.ApplyService;
@@ -19,10 +20,7 @@ import java.util.UUID;
 @RequestMapping("api/apply/")
 public class ApplyController {
     private final ApplyService applyService;
-//    private final ApplyKafkaProducer applyKafkaProducer;
     ApplyResponse applyResponse = new ApplyResponse();
-
-
 
     @PostMapping("create")
     public ResponseEntity<ApiResponse<ApplyResponse>> createApply(@RequestBody ApplyRequest applyRequest){
@@ -64,4 +62,20 @@ public class ApplyController {
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sach apply thuoc status", list);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @GetMapping("getAppliesByCandidateId/{candidateId}")
+    public ResponseEntity<ApiResponse<List<Apply>>> getAppliesByCandidateId(@PathVariable Long candidateId) {
+        // Log khi lấy thông tin CV
+        System.out.println("Lấy tất cả apply thuộc candidateId: " + candidateId);
+
+        // Gọi service để lấy danh sách apply
+        List<Apply> list = applyService.getAppliesByCandidateId(candidateId);
+
+        // Tạo ApiResponse với thông báo thành công
+        ApiResponse<List<Apply>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách apply thuộc candidateId", list);
+
+        // Trả về ApiResponse trong ResponseEntity
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
 }

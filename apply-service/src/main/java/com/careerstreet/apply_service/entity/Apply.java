@@ -25,14 +25,22 @@ public class Apply {
     private Long applyId;
 
     @Column(name = "candidateCv_id")
-    private String candidateCvId;
+    private Long candidateCvId;
 
     @Column(name = "job_id")
-    private String jobId;
+    private Long jobId;
 
     @Column(name = "date")
     private LocalDate date;
 
+    @Column(name = "coverLetter", length = 5000)
+    private String coverLetter;
+
     @Column(name = "status")
     private int status;
+
+    @PrePersist
+    protected void onCreate() {
+        this.date = LocalDate.now(); // Gán giá trị ngày hiện tại
+    }
 }

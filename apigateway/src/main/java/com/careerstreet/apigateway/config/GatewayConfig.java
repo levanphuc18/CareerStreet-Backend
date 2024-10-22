@@ -104,8 +104,10 @@ public class GatewayConfig {
                                 ,Constants.JOB_PREFIX+ "/get/{id}"
                                 ,Constants.JOB_PREFIX+ "/getJobByEmployer/{employerId}"
                                 ,Constants.JOB_PREFIX+ "/getall"
+                                ,Constants.JOB_PREFIX+ "/getall/status/{status}"
                         // LEVEL
                                 ,Constants.LEVEL_PREFIX+ "/create"
+                                ,Constants.LEVEL_PREFIX+ "/getall"
                         ).and()
                         .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
                         //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))
@@ -116,6 +118,7 @@ public class GatewayConfig {
                                 Constants.APPLY_PREFIX+"/create"
                                 ,Constants.APPLY_PREFIX+ "/update/{id}/applystatus/{status}"
                                 ,Constants.APPLY_PREFIX+ "/getJobByStatus/{status}"
+                                ,Constants.APPLY_PREFIX+ "/getAppliesByCandidateId/{candidateId}"
                         ).and()
                         .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
                         //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))
@@ -124,6 +127,10 @@ public class GatewayConfig {
                 // Tech route
                 .route("tech-service", r->r.path(
                                 Constants.TECH_PREFIX+"/create"
+                                ,Constants.TECH_PREFIX+"/getall"
+                        // Tech-Detail
+                                ,Constants.TECHDETAIL_PREFIX+"/create"
+                                ,Constants.TECHDETAIL_PREFIX+"/get-tech/{jobId}"
                         ).and()
                         .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
                         //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))

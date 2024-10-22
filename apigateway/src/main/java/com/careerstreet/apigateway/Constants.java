@@ -11,6 +11,7 @@ public class Constants {
     public static final String LEVEL_PREFIX="/api/level";
     public static final String APPLY_PREFIX="/api/apply";
     public static final String TECH_PREFIX="/api/tech";
+    public static final String TECHDETAIL_PREFIX="/api/tech-detail";
     public static final String FILE_PREFIX="/api/file";
     public static final String NOTIFICATION_PREFIX="/api/notification";
 

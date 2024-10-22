@@ -82,16 +82,16 @@ public class CandidateCvController {
     }
 
     @GetMapping("by-candidate/{candidateId}")
-    public ResponseEntity<ApiResponse<List<CandidateCvResponse>>> getAllCandidateCv(@PathVariable Long candidateId) {
+    public ResponseEntity<ApiResponse<List<CandidateCvResponse>>> getCandidateCvBycandidateId(@PathVariable Long candidateId) {
         // Log khi lấy thông tin CV
-        System.out.println("Lấy tat ca thông tin CV với ID: " + candidateId);
+        System.out.println("Lấy tất cả thông tin CV với ID: " + candidateId);
 
         // Gọi service để lấy CV
         List<CandidateCvResponse> list = candidateCvService.getCvByCandidateId(candidateId);
 
         // Tạo response với thông báo thành công
-        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sach cv", list);
-        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        ApiResponse<List<CandidateCvResponse>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách CV", list);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse); // Trả về apiResponse thay vì list
     }
 
 }
