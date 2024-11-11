@@ -1,5 +1,6 @@
 package com.careerstreet.candidate_service.service.implement;
 
+//import com.careerstreet.candidate_service.client.NotificationClient;
 import com.careerstreet.candidate_service.dto.CandidateRequest;
 import com.careerstreet.candidate_service.dto.CandidateResponse;
 import com.careerstreet.candidate_service.entity.Candidate;
@@ -9,7 +10,6 @@ import com.careerstreet.candidate_service.repository.CandidateRepository;
 import com.careerstreet.candidate_service.service.CandidateService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class CandidateServiceImpl implements CandidateService {
     private final ModelMapper modelMapper;
     private final CandidateRepository candidateRepository;
+//    private final NotificationClient notificationClient;
 
     @Override
     public CandidateResponse createCandidate(CandidateRequest candidateRequest){

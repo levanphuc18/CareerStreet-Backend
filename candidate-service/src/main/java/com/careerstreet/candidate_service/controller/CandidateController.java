@@ -24,7 +24,7 @@ public class CandidateController {
     public ResponseEntity<ApiResponse<CandidateResponse>> createCandidate (@RequestBody CandidateRequest candidateRequest){
         System.out.println(" Cbi Tao ung vien ");
         CandidateResponse candidateResponse= candidateService.createCandidate(candidateRequest);
-        ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS, "Tao ung vien thanh cong rsp New", candidateResponse);
+        ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS, "Tạo ứng viên thành công", candidateResponse);
         System.out.println("Tao ung vien thanh cong rsp New");
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
@@ -57,6 +57,7 @@ public class CandidateController {
 
     @GetMapping("list/all")
     public ResponseEntity<ApiResponse<List<CandidateResponse>>>getAllCandidate(){
+        System.out.println("get all candidate");
        List<CandidateResponse> list = candidateService.getAllCandidate();
        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Lay tat ca danh sach ung vien", list);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);

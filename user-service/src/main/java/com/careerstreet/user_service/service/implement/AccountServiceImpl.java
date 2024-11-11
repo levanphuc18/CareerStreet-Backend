@@ -1,5 +1,7 @@
 package com.careerstreet.user_service.service.implement;
 
+//import com.careerstreet.user_service.client.EmployerClient;
+import com.careerstreet.user_service.client.EmployerClient;
 import com.careerstreet.user_service.client.NotificationClient;
 import com.careerstreet.user_service.dto.*;
 import com.careerstreet.user_service.entity.Account;
@@ -26,6 +28,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
 
     private final CandidateClient candidateClient;
+    private final EmployerClient employerClient;
     private final NotificationClient notificationClient;
 
 
@@ -81,12 +84,31 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Long getCandidateIdByUsername (String username){
-        ApiResponse<CandidateResponse> apiResponse = candidateClient.getCandidate(username).getBody();
-        if (apiResponse != null && apiResponse.getData() != null) {
-            return apiResponse.getData().getCandidateId();
+    public Long getUserIdByUsername (String username){
+        Long roleId = this.getRoleIdByUsername(username);
+        if(roleId==null){
+            throw new EntityNotFoundException("Khong co role ", GlobalCode.ERROR_ENTITY_NOT_FOUND);
+        }else if (roleId==3){
+            ApiResponse<CandidateResponse> apiResponse = candidateClient.getCandidate(username).getBody();
+            if (apiResponse != null && apiResponse.getData() != null) {
+                return apiResponse.getData().getCandidateId();
+            }
+        }else {
+            System.out.println("2");
+            ApiResponse<EmployerResponse> apiResponse = employerClient.getEmployer(username).getBody();
+            if (apiResponse != null && apiResponse.getData() != null) {
+                System.out.println("2");
+                System.out.println("2"+apiResponse.getData().getEmployerId());
+                return apiResponse.getData().getEmployerId();
+
+            }
         }
         return null;
     }
 
+    @Override
+    public String getEmailByUsername(String username){
+        String email = accountRepository.findEmailByUsername(username);
+        return email;
+    }
 }

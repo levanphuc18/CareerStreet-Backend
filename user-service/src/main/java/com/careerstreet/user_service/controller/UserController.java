@@ -33,7 +33,7 @@ public class UserController {
         System.out.println(response.getUsername()+" user");
         System.out.println(response.getUserId()+" kaka");
 
-        ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS,"Đăng kí tài khoản ứng viên thành công",response);
+        ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS,"Đăng kí tài khoản thành công",response);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
@@ -42,9 +42,9 @@ public class UserController {
 
 
         TokenResponse tokenResponse = authService.createToken(loginRequest.getUsername(),loginRequest.getPassword());
-        Long candidate_id = accountService.getCandidateIdByUsername(loginRequest.getUsername());
-        System.out.println(" rsp login + ID CANDIADTE " + candidate_id);
-        AccountResponse accountResponse = new AccountResponse(loginRequest.getUsername(),tokenResponse.getToken(),candidate_id);
+        Long userId = accountService.getUserIdByUsername(loginRequest.getUsername());
+        System.out.println(" rsp login + ID " + userId);
+        AccountResponse accountResponse = new AccountResponse(loginRequest.getUsername(),tokenResponse.getToken(),userId);
         ApiResponse<AccountResponse> response = new ApiResponse<>(GlobalCode.SUCCESS,"Đăng nhập thành công",accountResponse);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -62,12 +62,19 @@ public class UserController {
     }
 
     @GetMapping("getaccount/{username}")
-    public ResponseEntity<ApiResponse<AccountResponse>> getAccountByUserName(@PathVariable String username){
+    public ResponseEntity<ApiResponse<UserResponse>> getAccountByUserName(@PathVariable String username){
         System.out.println("username "+username);
         Account accountResponse = accountService.getAccount(username);
 
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS,"thanh cong",accountResponse);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("get-email/{username}")
+    public ResponseEntity<String> getEmailByUsername(@PathVariable String username){
+        System.out.println("email " + username);
+        String email = accountService.getEmailByUsername(username);
+        return ResponseEntity.status(HttpStatus.OK).body(email);
     }
 
 }

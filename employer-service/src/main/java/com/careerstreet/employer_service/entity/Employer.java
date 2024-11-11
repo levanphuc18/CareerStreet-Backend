@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.time.LocalDate;
+
 @Entity
 @Table
 @Getter
@@ -22,27 +24,24 @@ public class Employer {
     @Column(name = "employer_id")
     private Long employerId;
 
-    @Column(name = "full_name", nullable = false)
+    @Column(name = "full_name", nullable = true)
     private String fullName;
 
-    @Column(name = "gender", nullable = false)
-    private boolean gender; // 0 nu
-                            // 1 nam
-
-    @Column(name = "company", nullable = false)
-    private String company;
-
-    @Column(name = "tax", nullable = false)
-    private String tax;
-
-    @Column(name = "address", nullable = false)
+    @Column(name = "address", nullable = true)
     private String address;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone", nullable = true)
     private String phone;
+
+    @Column(name = "gender", nullable = true)
+    private boolean gender; // 0 nu
+    // 1 nam
 
     @Column(name = "avatar", nullable = true)
     private String avatar;
+
+    @Column(name = "birthday", nullable = true)
+    private LocalDate birthday;
 
     @Column(name = "username", nullable = false, length = 100, unique = true)
     private String username;

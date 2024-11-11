@@ -1,4 +1,4 @@
-package com.careerstreet.candidate_service.dto;
+package com.careerstreet.user_service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class CandidateResponse {
-    Long candidateId;
+public class EmployerResponse {
+    Long employerId;
     String fullName;
     String address;
     boolean gender;
@@ -20,6 +20,4 @@ public class CandidateResponse {
     String phone;
     String avatar;
     String username;
-    String email; // Thêm trường email
-    boolean active; // Thêm trường active
 }

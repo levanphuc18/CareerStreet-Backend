@@ -23,7 +23,7 @@ public class EmployerController {
         System.out.println(" Cbi Tao nhà tuyển dụng ");
         EmployerResponse employerResponse = employerService.createEmployer(employerRequest);
 
-        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Tạo nhà tuyển dụng thành coong", employerRequest);
+        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Tạo nhà tuyển dụng thành công", employerRequest);
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
@@ -64,7 +64,7 @@ public class EmployerController {
     @GetMapping("getemployer/{employerId}")
     public ResponseEntity<EmployerResponse>getEmployerById(@PathVariable Long employerId){
         EmployerResponse employerResponse = employerService.getEmployerById(employerId);
-        System.out.println( "Cong ty vơi Id "+ employerId + " la: " + employerResponse.getCompany());
+        System.out.println( "Cong ty vơi Id "+ employerId + " la: " + employerResponse.getAddress());
 //        ApiResponse apiResponse = new ApiResponse(GlobalCode.SUCCESS, "Ten cong ty", conpany_name);
         return ResponseEntity.status(HttpStatus.OK).body(employerResponse);
     }

@@ -16,9 +16,8 @@ public class EmployerResponse {
     String fullName;
     String address;
     boolean gender;
+    LocalDate birthday;
     String phone;
     String avatar;
     String username;
-    String company;
-    String tax;
 }

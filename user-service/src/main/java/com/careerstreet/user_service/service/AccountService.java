@@ -10,7 +10,6 @@ public interface AccountService {
     Account getAccount(String username);
     Long getRoleIdByUsername(String username);
 
-    Long getCandidateIdByUsername(String username);
-
-
+    Long getUserIdByUsername(String username);
+    String getEmailByUsername(String username);
 }
