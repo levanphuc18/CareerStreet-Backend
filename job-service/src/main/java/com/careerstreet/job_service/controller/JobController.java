@@ -88,4 +88,25 @@ public class JobController {
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sach tat ca job thuộc status", list);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+
+    @GetMapping("get-name/{id}")
+    public ResponseEntity<String> getJobNameById(@PathVariable Long id) {
+        // Log khi lấy thông tin CV
+        System.out.println("Lấy ten job bang jobId: " + id);
+
+        // Gọi service để lấy CV
+        String jobName = jobService.getJobNameById(id);
+
+        // Tạo response với thông báo thành công
+        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Lay ten job boi jobId", jobName);
+        return ResponseEntity.status(HttpStatus.OK).body(jobName);
+    }
+
+    @PutMapping("update/{jobId}/jobstatus/{status}")
+    public ResponseEntity<ApiResponse<JobResponse>> updateJobStatus(@PathVariable long jobId, @PathVariable Long status){
+        JobResponse jobResponse = jobService.updateJobStatus(jobId,status);
+
+        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "cap nhat thanh cong trang thai cong viec", jobResponse);
+    return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

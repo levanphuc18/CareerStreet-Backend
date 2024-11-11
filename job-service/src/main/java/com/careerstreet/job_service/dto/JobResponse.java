@@ -21,6 +21,7 @@ public class JobResponse {
     private String title;
     private String jobLocation; // Có thể thay đổi nếu cần
     private Long salary;
+    private Long numberOfRecruitment;
     private String jobDescription; // Thay đổi từ description thành jobDescription
     private String jobRequirements; // Thay đổi từ requirement thành jobRequirements
     private String benefits;

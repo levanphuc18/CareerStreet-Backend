@@ -17,4 +17,9 @@ public interface JobService {
     List<JobResponse> getAllJob();
     List<JobResponse> getAllJobByStatus(Long status);
     void increaseJobViews(Long jobId);
+    String getJobNameById(Long jobId);
+
+    JobResponse updateJobStatus(Long jobId, Long status);
+
+    void updateStatusExpiration(Long jobId);
 }

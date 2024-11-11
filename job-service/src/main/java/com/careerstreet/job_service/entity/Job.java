@@ -60,8 +60,8 @@ public class Job {
     @Column(name = "education_level")
     private String educationLevel;
 
-//    @Column(name = "experience_level")
-//    private String experienceLevel;
+    @Column(name = "number_of_recruitment")
+    private Long numberOfRecruitment;
 
     @Column(name = "job_rank")
     private String jobRank;

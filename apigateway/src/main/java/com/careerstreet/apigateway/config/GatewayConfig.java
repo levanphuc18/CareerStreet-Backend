@@ -49,7 +49,7 @@ public class GatewayConfig {
                                 Constants.USER_PREFIX+"/register"
                                 ,Constants.USER_PREFIX+"/login"
                                 ,Constants.USER_PREFIX+ "/**"
-                                ,Constants.USER_PREFIX+ "/getemail/{username}"
+                                ,Constants.USER_PREFIX+ "/get-email/{username}"
 
                         ).and()
                         .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
@@ -105,9 +105,12 @@ public class GatewayConfig {
                                 ,Constants.JOB_PREFIX+ "/getJobByEmployer/{employerId}"
                                 ,Constants.JOB_PREFIX+ "/getall"
                                 ,Constants.JOB_PREFIX+ "/getall/status/{status}"
+                                ,Constants.JOB_PREFIX+ "/get-name/{id}"
+                                ,Constants.JOB_PREFIX+ "/update/{jobId}/jobstatus/{status}"
                         // LEVEL
                                 ,Constants.LEVEL_PREFIX+ "/create"
                                 ,Constants.LEVEL_PREFIX+ "/getall"
+                                ,Constants.LEVEL_PREFIX+ "/get-name/{levelId}"
                         ).and()
                         .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
                         //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))
@@ -119,6 +122,7 @@ public class GatewayConfig {
                                 ,Constants.APPLY_PREFIX+ "/update/{id}/applystatus/{status}"
                                 ,Constants.APPLY_PREFIX+ "/getJobByStatus/{status}"
                                 ,Constants.APPLY_PREFIX+ "/getAppliesByCandidateId/{candidateId}"
+                                ,Constants.APPLY_PREFIX+ "/getAppliesByJobId/{jobId}"
                         ).and()
                         .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
                         //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))

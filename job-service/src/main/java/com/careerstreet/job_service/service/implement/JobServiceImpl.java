@@ -102,10 +102,10 @@ public class JobServiceImpl implements JobService {
                     jobResponse.setLevelName(job.getLevel().getName());
                     jobResponse.setStatus(job.getStatus());
 
-                    // tim employer dua vao id
-                    EmployerResponse employerResponse = employerClient.getEmployerById(job.getEmployerId()).getBody();
-                    // gan ten cong ty vao job
-                    jobResponse.setCompanyName(employerResponse.getCompany());
+//                    // tim employer dua vao id
+//                    EmployerResponse employerResponse = employerClient.getEmployerById(job.getEmployerId()).getBody();
+//                    // gan ten cong ty vao job
+//                    jobResponse.setCompanyName(employerResponse.getCompany());
 
                     return jobResponse;
                 })
@@ -132,6 +132,7 @@ public class JobServiceImpl implements JobService {
                     jobResponse.setTitle(job.getTitle());
                     jobResponse.setJobLocation(job.getJobLocation()); // Sửa lại để lấy jobLocation
                     jobResponse.setSalary(job.getSalary());
+                    jobResponse.setNumberOfRecruitment(job.getNumberOfRecruitment());
                     jobResponse.setJobDescription(job.getJobDescription()); // Sửa lại để lấy jobDescription
                     jobResponse.setJobRequirements(job.getJobRequirements()); // Sửa lại để lấy jobRequirements
                     jobResponse.setBenefits(job.getBenefits()); // Thêm thông tin về lợi ích
@@ -157,10 +158,10 @@ public class JobServiceImpl implements JobService {
                     // get Level name
                     jobResponse.setLevelName(level.getName());
 
-                // Tìm employer dựa vào id
-                    EmployerResponse employerResponse = employerClient.getEmployerById(job.getEmployerId()).getBody();
-                // Gán tên công ty vào job
-                    jobResponse.setCompanyName(employerResponse.getCompany());
+//                // Tìm employer dựa vào id
+//                    EmployerResponse employerResponse = employerClient.getEmployerById(job.getEmployerId()).getBody();
+//                // Gán tên công ty vào job
+//                    jobResponse.setCompanyName(employerResponse.getCompany());
 
                 // Chuyển đổi các thuộc tính khác nếu cần
                     return jobResponse;
@@ -187,6 +188,7 @@ public class JobServiceImpl implements JobService {
                     jobResponse.setTitle(job.getTitle());
                     jobResponse.setJobLocation(job.getJobLocation()); // Lấy jobLocation
                     jobResponse.setSalary(job.getSalary());
+                    jobResponse.setNumberOfRecruitment(job.getNumberOfRecruitment());
                     jobResponse.setJobDescription(job.getJobDescription()); // Lấy jobDescription
                     jobResponse.setJobRequirements(job.getJobRequirements()); // Lấy jobRequirements
                     jobResponse.setBenefits(job.getBenefits()); // Thêm thông tin về lợi ích
@@ -212,10 +214,10 @@ public class JobServiceImpl implements JobService {
                     // Get Level name
                     jobResponse.setLevelName(level.getName());
 
-                    // Tìm employer dựa vào id
-                    EmployerResponse employerResponse = employerClient.getEmployerById(job.getEmployerId()).getBody();
-                    // Gán tên công ty vào job
-                    jobResponse.setCompanyName(employerResponse.getCompany());
+//                    // Tìm employer dựa vào id
+//                    EmployerResponse employerResponse = employerClient.getEmployerById(job.getEmployerId()).getBody();
+//                    // Gán tên công ty vào job
+//                    jobResponse.setCompanyName(employerResponse.getCompany());
 
                     return jobResponse;
                 })
@@ -229,5 +231,31 @@ public class JobServiceImpl implements JobService {
     @Transactional
     public void increaseJobViews(Long jobId){
         jobRepository.updateViews(jobId);
+    }
+
+    @Override
+    public String getJobNameById(Long jobId){
+        String jobName= jobRepository.findJobNameByJobId(jobId);
+        return jobName;
+    }
+
+    @Override
+    public JobResponse updateJobStatus(Long jobId, Long status){
+        Job job = jobRepository.findById(jobId).orElseThrow(
+                () -> new EntityNotFoundException("Khong tim thay thong tịn cong viec" , GlobalCode.ERROR_ENTITY_NOT_FOUND)
+        );
+        job.setStatus(status);
+        job = jobRepository.save(job);
+        JobResponse jobResponse = modelMapper.map(job, JobResponse.class);
+        return jobResponse;
+    }
+
+    @Override
+    public void updateStatusExpiration(Long jobId){
+        Job job = jobRepository.findById(jobId).orElseThrow(
+                () -> new EntityNotFoundException("Khong tim thay thong tịn cong viec" , GlobalCode.ERROR_ENTITY_NOT_FOUND)
+        );
+        job.setStatus(2L);
+        jobRepository.save(job);
     }
 }
