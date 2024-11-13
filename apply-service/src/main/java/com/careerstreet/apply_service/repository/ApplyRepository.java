@@ -9,4 +9,5 @@ import java.util.List;
 public interface ApplyRepository extends JpaRepository<Apply, Long> {
     // Tìm tất cả Apply dựa trên candidateCvId
     List<Apply> findByCandidateCvId(Long candidateCvId);
+    List<Apply> findAllByJobId(Long jobId);
 }

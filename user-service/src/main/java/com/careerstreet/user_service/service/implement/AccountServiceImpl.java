@@ -1,6 +1,7 @@
 package com.careerstreet.user_service.service.implement;
 
 //import com.careerstreet.user_service.client.EmployerClient;
+import com.careerstreet.event.NotificationEvent;
 import com.careerstreet.user_service.client.EmployerClient;
 import com.careerstreet.user_service.client.NotificationClient;
 import com.careerstreet.user_service.dto.*;
@@ -16,6 +17,7 @@ import com.careerstreet.user_service.repository.RoleRepository;
 import com.careerstreet.user_service.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,8 @@ public class AccountServiceImpl implements AccountService {
     private final EmployerClient employerClient;
     private final NotificationClient notificationClient;
 
-
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
     protected AccountResponse convertToAccountResponse(Account account) {
 
@@ -42,10 +45,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountResponse registerAccount(RegisterRequest registerRequest) {
         // set các giá trị notificationRequest
-        NotificationRequest notificationRequest = new NotificationRequest();
-        notificationRequest.setRecipient(registerRequest.getEmail());
-        notificationRequest.setSubject("Xác nhận tạo tài khoản");
-        notificationRequest.setMsgBody("Chúc mừng bạn đã tạo tài khoản thành công trên website tuyển dụng việc làm CarrerStreet");
+        NotificationEvent notificationEvent = new NotificationEvent();
+        notificationEvent.setRecipient(registerRequest.getEmail());
+        notificationEvent.setSubject("Xác nhận tạo tài khoản");
+        notificationEvent.setMsgBody("Chúc mừng bạn đã tạo tài khoản thành công trên website tuyển dụng việc làm CarrerStreet");
 
         boolean checkUsername = accountRepository.existsByUsername(registerRequest.getUsername());
         Role role = roleRepository.findById(registerRequest.getRole()).orElseThrow(
@@ -63,7 +66,8 @@ public class AccountServiceImpl implements AccountService {
         account = accountRepository.save(account);
 
         // gọi api client gửi mail
-        ApiResponse<NotificationResponse> apiResponse = notificationClient.createNotification(notificationRequest).getBody();
+//        ApiResponse<NotificationResponse> apiResponse = notificationClient.createNotification(notificationRequest).getBody();
+        kafkaTemplate.send("notification-register-topic",notificationEvent);
         return convertToAccountResponse(account);
     }
 

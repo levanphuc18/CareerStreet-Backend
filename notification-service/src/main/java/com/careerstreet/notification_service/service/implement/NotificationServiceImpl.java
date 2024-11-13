@@ -9,6 +9,7 @@ import com.careerstreet.notification_service.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,24 +17,24 @@ import org.springframework.stereotype.Service;
 public class NotificationServiceImpl implements NotificationService {
     private final ModelMapper modelMapper;
     private final EmailService emailService;
-
     @Autowired
     NotificationRepository notificationRepository;
 
-    public NotificationResponse createNotification(NotificationRequest notificationRequest){
-        Notification notification = new Notification();
-        notification.setSubject(notificationRequest.getSubject());
-        notification.setRecipient(notificationRequest.getRecipient());
-        notification.setMsgBody(notificationRequest.getMsgBody());
-        notification.setStatus("Chưa gửi");
+//    public NotificationResponse createNotification(NotificationRequest notificationRequest){
+//        Notification notification = new Notification();
+//        notification.setSubject(notificationRequest.getSubject());
+//        notification.setRecipient(notificationRequest.getRecipient());
+//        notification.setMsgBody(notificationRequest.getMsgBody());
+//        notification.setStatus("Chưa gửi");
+//
+//        emailService.sendEmail(notificationRequest);
+//        notification.setStatus("Đã gửi");
+//
+//        notification = notificationRepository.save(notification);
+//
+//        NotificationResponse notificationResponse = modelMapper.map(notification, NotificationResponse.class);
+//
+//        return notificationResponse;
+//    }
 
-        emailService.sendEmail(notificationRequest);
-        notification.setStatus("Đã gửi");
-
-        notification = notificationRepository.save(notification);
-
-        NotificationResponse notificationResponse = modelMapper.map(notification, NotificationResponse.class);
-
-        return notificationResponse;
-    }
 }

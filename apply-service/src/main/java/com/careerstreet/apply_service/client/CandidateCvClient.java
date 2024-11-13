@@ -14,4 +14,7 @@ import java.util.List;
 public interface CandidateCvClient {
     @GetMapping("by-candidate/{candidateId}")
     public ApiResponse<List<CandidateCvResponse>> getCandidateCvBycandidateId(@PathVariable Long candidateId);
+
+    @GetMapping("get/{id}")
+    public ResponseEntity<ApiResponse<CandidateCvResponse>> getCvById(@PathVariable Long id);
 }

@@ -14,4 +14,5 @@ public interface ApplyService {
     List<ApplyResponse> getListApplyByStatus(int status);
 
     List<Apply> getAppliesByCandidateId(Long candidateId);
+    List<Apply> getAppliesByJobId(Long jobId);
 }

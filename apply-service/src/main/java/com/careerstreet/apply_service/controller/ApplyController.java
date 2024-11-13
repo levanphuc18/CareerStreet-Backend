@@ -33,17 +33,11 @@ public class ApplyController {
     @PutMapping("update/{id}/applystatus/{status}")
     public ResponseEntity<ApiResponse<ApplyResponse>> updateApplyStatus(@PathVariable Long id, @PathVariable int status ){
         ApplyResponse applyResponse = applyService.updateApplyStatus(id,status);
-        // Sinh UUID cho message Kafka
-        String uuid = UUID.randomUUID().toString();
-        // Chuyển đổi OrderResponse thành OrderKafka (có thể cần ánh xạ hoặc tạo đối tượng mới)
-//        applyKafka.setUuid(uuid);
-        // Bạn có thể cần ánh xạ các thuộc tính từ orderResponse sang orderKafka nếu cần
         applyResponse.setCandidateCvId(applyResponse.getCandidateCvId());
         applyResponse.setJobId(applyResponse.getJobId());
         applyResponse.setDate(applyResponse.getDate());
         applyResponse.setStatus(applyResponse.getStatus());
 
-//        applyKafkaProducer.writeToKafka(applyResponse, uuid);
         System.out.println("update status apply "+ applyResponse);
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "cap nhat trang thai thanh cong", applyResponse);
 
@@ -73,6 +67,21 @@ public class ApplyController {
 
         // Tạo ApiResponse với thông báo thành công
         ApiResponse<List<Apply>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách apply thuộc candidateId", list);
+
+        // Trả về ApiResponse trong ResponseEntity
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("getAppliesByJobId/{jobId}")
+    public ResponseEntity<ApiResponse<List<Apply>>> getAppliesByJobId(@PathVariable Long jobId) {
+        // Log khi lấy thông tin CV
+        System.out.println("Lấy tất cả apply thuộc jobId: " + jobId);
+
+        // Gọi service để lấy danh sách apply
+        List<Apply> list = applyService.getAppliesByJobId(jobId);
+
+        // Tạo ApiResponse với thông báo thành công
+        ApiResponse<List<Apply>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách apply thuộc jobId", list);
 
         // Trả về ApiResponse trong ResponseEntity
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
