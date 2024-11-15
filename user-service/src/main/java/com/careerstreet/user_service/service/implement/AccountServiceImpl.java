@@ -2,6 +2,7 @@ package com.careerstreet.user_service.service.implement;
 
 //import com.careerstreet.user_service.client.EmployerClient;
 import com.careerstreet.event.NotificationEvent;
+import com.careerstreet.user_service.client.AdminClient;
 import com.careerstreet.user_service.client.EmployerClient;
 import com.careerstreet.user_service.client.NotificationClient;
 import com.careerstreet.user_service.dto.*;
@@ -31,6 +32,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final CandidateClient candidateClient;
     private final EmployerClient employerClient;
+    private final AdminClient adminClient;
     private final NotificationClient notificationClient;
 
     @Autowired
@@ -88,27 +90,30 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Long getUserIdByUsername (String username){
+    public Long getUserIdByUsername(String username) {
         Long roleId = this.getRoleIdByUsername(username);
-        if(roleId==null){
-            throw new EntityNotFoundException("Khong co role ", GlobalCode.ERROR_ENTITY_NOT_FOUND);
-        }else if (roleId==3){
+        if (roleId == null) {
+            throw new EntityNotFoundException("Không có role", GlobalCode.ERROR_ENTITY_NOT_FOUND);
+        } else if (roleId == 3) {
             ApiResponse<CandidateResponse> apiResponse = candidateClient.getCandidate(username).getBody();
             if (apiResponse != null && apiResponse.getData() != null) {
                 return apiResponse.getData().getCandidateId();
             }
-        }else {
-            System.out.println("2");
+        } else if (roleId == 1) {
+            // Xử lý cho roleId == 1, ví dụ gọi một API hoặc truy vấn cơ sở dữ liệu để lấy userId
+            ApiResponse<AdminResponse> apiResponse = adminClient.getAdmin(username).getBody();
+            if (apiResponse != null && apiResponse.getData() != null) {
+                return apiResponse.getData().getAdminId();
+            }
+        } else {
             ApiResponse<EmployerResponse> apiResponse = employerClient.getEmployer(username).getBody();
             if (apiResponse != null && apiResponse.getData() != null) {
-                System.out.println("2");
-                System.out.println("2"+apiResponse.getData().getEmployerId());
                 return apiResponse.getData().getEmployerId();
-
             }
         }
         return null;
     }
+
 
     @Override
     public String getEmailByUsername(String username){

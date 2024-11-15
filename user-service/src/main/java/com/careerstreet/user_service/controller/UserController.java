@@ -39,8 +39,6 @@ public class UserController {
 
     @PostMapping("login")
     public ResponseEntity<ApiResponse<AccountResponse>> loginAccount(@RequestBody LoginRequest loginRequest){
-
-
         TokenResponse tokenResponse = authService.createToken(loginRequest.getUsername(),loginRequest.getPassword());
         Long userId = accountService.getUserIdByUsername(loginRequest.getUsername());
         System.out.println(" rsp login + ID " + userId);

@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +22,13 @@ public class AdminController {
         System.out.println("Cbi tao admin");
         AdminResponse adminResponse = adminService.createAdmin(adminRequest);
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Tao admin thanh cong", adminResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+
+    @GetMapping("getbyusername/{username}")
+    public ResponseEntity<ApiResponse<AdminResponse>> getAdmin(@PathVariable String username){
+        AdminResponse adminResponse = adminService.getAdminByUserName(username);
+        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "lấy tt admin thành công", adminResponse);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }

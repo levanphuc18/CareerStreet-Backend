@@ -90,6 +90,7 @@ public class GatewayConfig {
                 // Admin+Blog route
                 .route("admin-service", r->r.path(
                                 Constants.ADMIN_PREFIX+"/create"
+                                    ,Constants.ADMIN_PREFIX+"/getbyusername/{username}"
                         // BLOG
                                 ,Constants.BLOG_PREFIX+ "/create"
                         ).and()
