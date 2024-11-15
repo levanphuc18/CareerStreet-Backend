@@ -82,10 +82,10 @@ public class JobServiceImpl implements JobService {
         jobResponse.setLevelName(job.getLevel().getName());
         jobResponse.setStatus(job.getStatus());
 
-        // tim employer dua vao id
-        EmployerResponse employerResponse = employerClient.getEmployerById(job.getEmployerId()).getBody();
-        // gan ten cong ty vao job
-        jobResponse.setCompanyName(employerResponse.getCompany());
+//        // tim employer dua vao id
+//        EmployerResponse employerResponse = employerClient.getEmployerById(job.getEmployerId()).getBody();
+//        // gan ten cong ty vao job
+//        jobResponse.setCompanyName(employerResponse.getCompany());
 
         return jobResponse;
     }
