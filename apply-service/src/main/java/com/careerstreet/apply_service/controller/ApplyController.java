@@ -87,4 +87,10 @@ public class ApplyController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
+    @GetMapping("/check-application")
+    public ResponseEntity<?> checkApplicationStatus(@RequestParam Long candidateId, @RequestParam Long jobId) {
+        boolean hasApplied = applyService.hasApplyForJob(candidateId, jobId);
+        System.out.println("status: "+ hasApplied);
+        return ResponseEntity.status(HttpStatus.OK).body(hasApplied);
+    }
 }

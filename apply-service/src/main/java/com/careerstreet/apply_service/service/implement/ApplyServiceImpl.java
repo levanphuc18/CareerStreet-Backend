@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -138,5 +139,20 @@ public class ApplyServiceImpl implements ApplyService {
     public List<Apply> getAppliesByJobId(Long jobId) {
         List<Apply> list = applyRepository.findAllByJobId(jobId);
         return list;
+    }
+
+    @Override
+    public boolean hasApplyForJob(Long candidateId, Long jobId){
+        // lấy tâất cả cv của ứng viên
+        ApiResponse<List<CandidateCvResponse>> response = candidateCvClient.getCandidateCvBycandidateId(candidateId);
+        List<CandidateCvResponse> listCv = response.getData();
+        for (CandidateCvResponse candidateCvResponse: listCv){
+            Optional<Apply> apply = applyRepository.findFirstByCandidateCvIdAndJobId(candidateCvResponse.getCandidateCvId(),jobId);
+            // Nếu tìm thấy đơn ứng tuyển, trả về true
+            if (apply.isPresent()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -15,4 +15,5 @@ public interface ApplyService {
 
     List<Apply> getAppliesByCandidateId(Long candidateId);
     List<Apply> getAppliesByJobId(Long jobId);
+    boolean hasApplyForJob(Long candidateId, Long jobId);
 }
