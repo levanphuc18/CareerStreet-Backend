@@ -1,5 +1,6 @@
 package com.careerstreet.notification_service.service.implement;
 
+import com.careerstreet.event.NotificationEvent;
 import com.careerstreet.notification_service.dto.NotificationRequest;
 import com.careerstreet.notification_service.service.KafkaProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,10 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplateDTO;
 
-    private static final String TOPICNEW = "notification-register-topic";
+    private static final String TOPICNEW = "email-topic";
 
-    public void sendMessageDTO(NotificationRequest notificationRequest) {
-        kafkaTemplateDTO.send(TOPICNEW, notificationRequest);
-        System.out.println("Sent message: " + notificationRequest.getRecipient());
+    public void sendMessageDTO(NotificationEvent notificationEvent) {
+        kafkaTemplateDTO.send(TOPICNEW, notificationEvent);
+        System.out.println("Sent message: " + notificationEvent.getRecipient());
     }
 }

@@ -13,11 +13,6 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
     @Autowired  // Đảm bảo có annotation này
     EmailService emailService;
     // Phương thức lắng nghe tin nhắn từ topic
-    @KafkaListener(topics = "email-topic")
-    public void listen(String message) {
-//        emailService.sendEmail(message);
-        System.out.println("Received message: " + message);
-    }
 
     @Override
     @KafkaListener(topics = "notification-register-topic")
@@ -29,6 +24,7 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
 //    @Override
     @KafkaListener(topics = "notification-updateStatus-topic")
     public void listenUpdateStatus(NotificationEvent notificationEvent) {
+        System.out.println("CB Received message update status kafka: " + notificationEvent.getRecipient());
         emailService.sendEmail(notificationEvent);
         System.out.println("Received message update status kafka: " + notificationEvent.getRecipient());
     }

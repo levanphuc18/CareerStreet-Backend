@@ -11,20 +11,26 @@ import com.careerstreet.user_service.entity.Role;
 import com.careerstreet.user_service.exception.EntityExitsException;
 import com.careerstreet.user_service.exception.EntityNotFoundException;
 import com.careerstreet.user_service.exception.GlobalCode;
+import com.careerstreet.user_service.exception.GlobalException;
 import com.careerstreet.user_service.repository.AccountRepository;
 
 import com.careerstreet.user_service.client.CandidateClient;
 import com.careerstreet.user_service.repository.RoleRepository;
 import com.careerstreet.user_service.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
+    private final ModelMapper modelMapper;
     @Autowired
     private PasswordEncoder encoder;
     private final RoleRepository roleRepository;
@@ -119,5 +125,31 @@ public class AccountServiceImpl implements AccountService {
     public String getEmailByUsername(String username){
         String email = accountRepository.findEmailByUsername(username);
         return email;
+    }
+
+    @Override
+    public List<AccountRes> getAccountByRole(Long roleId) {
+        List<AccountRes> list = accountRepository.findAll()
+                .stream()
+                .filter(account -> account.getRole().getRoleId() == roleId)
+                .map(account -> {
+                    AccountRes accountRes = modelMapper.map(account, AccountRes.class);
+                    return accountRes;
+                })
+                .collect(Collectors.toList());
+        return list;
+    }
+    @Override
+    public AccountRes updateIsActive(String username, boolean isActive) {
+        Account account = accountRepository.findAccountByUsername(username);
+        // Cập nhật trạng thái ứng tuyển
+        account.setActive(isActive);
+
+        // Lưu lại thay đổi trạng thái vào cơ sở dữ liệu
+        account = accountRepository.save(account);
+
+        // Chuyển đổi đối tượng Apply sang ApplyResponse
+        AccountRes accountRes = modelMapper.map(account, AccountRes.class);
+        return accountRes;
     }
 }

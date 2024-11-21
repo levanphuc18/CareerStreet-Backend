@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/user/")
@@ -74,5 +76,26 @@ public class UserController {
         String email = accountService.getEmailByUsername(username);
         return ResponseEntity.status(HttpStatus.OK).body(email);
     }
+    @GetMapping("by-role/{roleId}")
+    public ResponseEntity<ApiResponse<List<AccountRes>>> getAccountByRoleId(@PathVariable Long roleId) {
+        // Log khi lấy thông tin CV
+        System.out.println("Lấy tất cả thông tin account với role: " + roleId);
 
+        // Gọi service để lấy CV
+        List<AccountRes> list = accountService.getAccountByRole(roleId);
+
+        // Tạo response với thông báo thành công
+        ApiResponse<List<AccountRes>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách CV", list);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse); // Trả về apiResponse thay vì list
+    }
+    @PutMapping("update/is-active")
+    public ResponseEntity<ApiResponse<AccountRes>> updateIsActive(
+            @RequestParam String username,
+            @RequestParam boolean isActive) {
+        AccountRes accountRes = accountService.updateIsActive(username, isActive);
+        System.out.println("update is active " + isActive);
+        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Cập nhật trạng thái account thành công", accountRes);
+
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }
