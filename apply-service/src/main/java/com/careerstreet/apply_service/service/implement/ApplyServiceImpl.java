@@ -1,6 +1,7 @@
 package com.careerstreet.apply_service.service.implement;
 
 import com.careerstreet.apply_service.client.CandidateCvClient;
+import com.careerstreet.apply_service.client.JobClient;
 import com.careerstreet.apply_service.client.NotificationClient;
 import com.careerstreet.apply_service.dto.*;
 import com.careerstreet.apply_service.entity.Apply;
@@ -12,6 +13,7 @@ import com.careerstreet.event.NotificationEvent;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ public class ApplyServiceImpl implements ApplyService {
     private final ModelMapper modelMapper;
     private final ApplyRepository applyRepository;
     private final CandidateCvClient candidateCvClient;
+    private final JobClient jobClient;
     private final NotificationClient notificationClient;
 
     @Autowired
@@ -53,6 +56,7 @@ public class ApplyServiceImpl implements ApplyService {
         // Lấy thông tin CV của ứng viên từ dịch vụ Candidate CV
         CandidateCvResponse candidateCvResponse = candidateCvClient.getCvById(apply.getCandidateCvId()).getBody().getData();
         System.out.println("CV: " + candidateCvResponse);
+        System.out.println("Recipient: " + candidateCvResponse.getEmail());
 
         // Khởi tạo thông tin  notification
         NotificationEvent notificationEvent = new NotificationEvent();
@@ -103,7 +107,7 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     @Override
-    public List<ApplyResponse> getListApplyByStatus(int status) {
+    public List<ApplyResponse> getListAppliesByStatus(int status) {
         List<ApplyResponse> list = applyRepository.findAll()
                 .stream()
                 .filter(apply -> apply.getStatus() == status)
@@ -154,5 +158,20 @@ public class ApplyServiceImpl implements ApplyService {
             }
         }
         return false;
+    }
+    @Override
+    public List<Apply> getListAppliesByEmployer(Long employerId) {
+        // Gọi FeignClient để lấy danh sách CandidateCv dựa trên candidateId
+        ResponseEntity<ApiResponse<List<JobResponse>>> response = jobClient.getAllJobByemployerId(employerId);
+        List<JobResponse> listApiResponse = response.getBody().getData();
+        // Tạo danh sách để chứa kết quả Apply
+        List<Apply> applyList = new ArrayList<>();
+
+        // Duyệt qua danh sách  để lấy apply cho từng JobId
+        for (JobResponse jobResponse : listApiResponse) {
+            List<Apply> applies = applyRepository.findAllByJobId(jobResponse.getJobId());
+            applyList.addAll(applies);
+        }
+        return applyList;
     }
 }

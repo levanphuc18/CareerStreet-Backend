@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,7 +49,7 @@ public class ApplyController {
         System.out.println("Lấy tat ca apply thuoc status: " + status);
 
         // Gọi service để lấy job
-        List<ApplyResponse> list = applyService.getListApplyByStatus(status);
+        List<ApplyResponse> list = applyService.getListAppliesByStatus(status);
 
         // Tạo response với thông báo thành công
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sach apply thuoc status", list);
@@ -92,5 +91,19 @@ public class ApplyController {
         boolean hasApplied = applyService.hasApplyForJob(candidateId, jobId);
         System.out.println("status: "+ hasApplied);
         return ResponseEntity.status(HttpStatus.OK).body(hasApplied);
+    }
+    @GetMapping("getAppliesByEmployerId/{employerId}")
+    public ResponseEntity<ApiResponse<List<Apply>>> getAppliesByEmployerId(@PathVariable Long employerId) {
+        // Log khi lấy thông tin CV
+        System.out.println("Lấy tất cả apply thuộc employerId: " + employerId);
+
+        // Gọi service để lấy danh sách apply
+        List<Apply> list = applyService.getListAppliesByEmployer(employerId);
+
+        // Tạo ApiResponse với thông báo thành công
+        ApiResponse<List<Apply>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách apply thuộc employerId", list);
+
+        // Trả về ApiResponse trong ResponseEntity
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }
