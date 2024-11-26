@@ -106,4 +106,11 @@ public class ApplyController {
         // Trả về ApiResponse trong ResponseEntity
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+    @GetMapping("getAppliesByCandidateCv/{candidateCvId}")
+    public ResponseEntity<ApiResponse<List<ApplyResponse>>> getAppliesByCandidateCvId(@PathVariable Long candidateCvId){
+        System.out.println("Lấy tất cả apply thuộc candidateCvId: " + candidateCvId);
+        List<ApplyResponse> list = applyService.getListAppliesByCandidateCv(candidateCvId);
+        ApiResponse<List<ApplyResponse>> applyResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sach apply thuộc candidateCvId", list);
+        return ResponseEntity.status(HttpStatus.OK).body(applyResponse);
+    }
 }

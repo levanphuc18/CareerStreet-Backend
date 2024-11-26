@@ -174,4 +174,18 @@ public class ApplyServiceImpl implements ApplyService {
         }
         return applyList;
     }
+    @Override
+    public List<ApplyResponse> getListAppliesByCandidateCv(Long candidateCvId) {
+        // Lấy danh sách Apply từ repository theo candidateCvId
+        List<Apply> list = applyRepository.findByCandidateCvId(candidateCvId);
+
+        // Chuyển đổi danh sách Apply sang danh sách ApplyResponse
+        List<ApplyResponse> listResponse = list.stream()
+                .map(apply -> modelMapper.map(apply, ApplyResponse.class))
+                .collect(Collectors.toList());
+
+        // Trả về danh sách ApplyResponse
+        return listResponse;
+    }
+
 }

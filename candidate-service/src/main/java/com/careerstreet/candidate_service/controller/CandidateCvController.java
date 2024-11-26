@@ -1,5 +1,6 @@
 package com.careerstreet.candidate_service.controller;
 
+import com.careerstreet.candidate_service.client.ApplyClient;
 import com.careerstreet.candidate_service.dto.*;
 import com.careerstreet.candidate_service.exception.GlobalCode;
 import com.careerstreet.candidate_service.service.CandidateCvService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("api/candidate-cv/")
 public class CandidateCvController {
     private final CandidateCvService candidateCvService;
+    private final ApplyClient applyClient;
 
     @PostMapping("create")
 //    @PostMapping(value = "create", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -59,14 +62,29 @@ public class CandidateCvController {
     public ResponseEntity<ApiResponse<Void>> deleteCv(@PathVariable Long id) {
         // Log khi xóa CV
         System.out.println("Xóa CV với ID: " + id);
-        // Gọi service để xóa CV
-        candidateCvService.deleteCv(id);
 
-        // Tạo response với thông báo thành công
-        ApiResponse<Void> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Xóa CV ứng viên thành công", null);
+        // Lấy danh sách Apply của CV từ FeignClient
+        ApiResponse<List<ApplyResponse>> response = applyClient.getAppliesByCandidateCvId(id).getBody();
+
+        // Lấy danh sách ApplyResponse từ phản hồi
+        List<ApplyResponse> applyResponses = response.getData();
+        System.out.println("Có " + applyResponses.size() + " ApplyResponse");
+
+        // Kiểm tra xem có Apply nào có status không thể xóa không
+        for (ApplyResponse applyResponse : applyResponses) {
+            // Nếu trạng thái không phải là -1 hoặc 5 thì không thể xóa
+            if (applyResponse.getStatus() != -1 && applyResponse.getStatus() != 5) {
+                System.out.println("Không thể xóa xóa vì có Apply không hợp lệ");
+                ApiResponse<Void> apiResponse = new ApiResponse<>(GlobalCode.ERROR_ENTITY_NOT_FOUND, "Không thể xóa hồ sơ, hồ sơ đang được ứng tuyển", null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+            }
+        }
+
+        // Nếu tất cả Apply đều có status hợp lệ, tiến hành xóa CV
+        candidateCvService.deleteCv(id);
+        ApiResponse<Void> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Xóa hồ sơ thành công", null);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
-
 
     @GetMapping("get/{id}")
     public ResponseEntity<ApiResponse<CandidateCvResponse>> getCvById(@PathVariable Long id) {
