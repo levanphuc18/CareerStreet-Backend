@@ -26,4 +26,9 @@ public class Role {
 
     @Column(name = "role_name", nullable = false, unique = true, length = 50)
     private String roleName;
+
+    // Constructor nhận tham số roleName
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
 }
