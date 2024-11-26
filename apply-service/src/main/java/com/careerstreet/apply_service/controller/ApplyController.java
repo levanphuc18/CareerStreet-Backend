@@ -57,30 +57,30 @@ public class ApplyController {
     }
 
     @GetMapping("getAppliesByCandidateId/{candidateId}")
-    public ResponseEntity<ApiResponse<List<Apply>>> getAppliesByCandidateId(@PathVariable Long candidateId) {
+    public ResponseEntity<ApiResponse<List<ApplyResponse>>> getAppliesByCandidateId(@PathVariable Long candidateId) {
         // Log khi lấy thông tin CV
         System.out.println("Lấy tất cả apply thuộc candidateId: " + candidateId);
 
         // Gọi service để lấy danh sách apply
-        List<Apply> list = applyService.getAppliesByCandidateId(candidateId);
+        List<ApplyResponse> list = applyService.getAppliesByCandidateId(candidateId);
 
         // Tạo ApiResponse với thông báo thành công
-        ApiResponse<List<Apply>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách apply thuộc candidateId", list);
+        ApiResponse<List<ApplyResponse>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách apply thuộc candidateId", list);
 
         // Trả về ApiResponse trong ResponseEntity
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
     @GetMapping("getAppliesByJobId/{jobId}")
-    public ResponseEntity<ApiResponse<List<Apply>>> getAppliesByJobId(@PathVariable Long jobId) {
+    public ResponseEntity<ApiResponse<List<ApplyResponse>>> getAppliesByJobId(@PathVariable Long jobId) {
         // Log khi lấy thông tin CV
         System.out.println("Lấy tất cả apply thuộc jobId: " + jobId);
 
         // Gọi service để lấy danh sách apply
-        List<Apply> list = applyService.getAppliesByJobId(jobId);
+        List<ApplyResponse> list = applyService.getAppliesByJobId(jobId);
 
         // Tạo ApiResponse với thông báo thành công
-        ApiResponse<List<Apply>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách apply thuộc jobId", list);
+        ApiResponse<List<ApplyResponse>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách apply thuộc jobId", list);
 
         // Trả về ApiResponse trong ResponseEntity
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
@@ -93,15 +93,15 @@ public class ApplyController {
         return ResponseEntity.status(HttpStatus.OK).body(hasApplied);
     }
     @GetMapping("getAppliesByEmployerId/{employerId}")
-    public ResponseEntity<ApiResponse<List<Apply>>> getAppliesByEmployerId(@PathVariable Long employerId) {
+    public ResponseEntity<ApiResponse<List<ApplyResponse>>> getAppliesByEmployerId(@PathVariable Long employerId) {
         // Log khi lấy thông tin CV
         System.out.println("Lấy tất cả apply thuộc employerId: " + employerId);
 
         // Gọi service để lấy danh sách apply
-        List<Apply> list = applyService.getListAppliesByEmployer(employerId);
+        List<ApplyResponse> list = applyService.getListAppliesByEmployer(employerId);
 
         // Tạo ApiResponse với thông báo thành công
-        ApiResponse<List<Apply>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách apply thuộc employerId", list);
+        ApiResponse<List<ApplyResponse>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách apply thuộc employerId", list);
 
         // Trả về ApiResponse trong ResponseEntity
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);

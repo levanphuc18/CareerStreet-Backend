@@ -36,9 +36,9 @@ public class TechDetailController {
     }
 
     @GetMapping("/get-tech/{jobId}")
-    public ResponseEntity<ApiResponse<List<Tech>>> getTechByJobId(@PathVariable Long jobId){
+    public ResponseEntity<ApiResponse<List<TechResponse>>> getTechByJobId(@PathVariable Long jobId){
         System.out.println("gget all tech: " + jobId);
-        List<Tech> list = techDetailService.getTechByJobId(jobId);
+        List<TechResponse> list = techDetailService.getTechByJobId(jobId);
         System.out.println(list.size());
         // Tạo response với thông báo thành công
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sach tech cua job", list);

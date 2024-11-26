@@ -121,7 +121,7 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     @Override
-    public List<Apply> getAppliesByCandidateId(Long candidateId) {
+    public List<ApplyResponse> getAppliesByCandidateId(Long candidateId) {
         // Gọi FeignClient để lấy danh sách CandidateCv dựa trên candidateId
         ApiResponse<List<CandidateCvResponse>> response = candidateCvClient.getCandidateCvBycandidateId(candidateId);
 
@@ -129,20 +129,31 @@ public class ApplyServiceImpl implements ApplyService {
         List<CandidateCvResponse> candidateCvs = response.getData(); // Lấy danh sách từ trường data
 
         // Tạo danh sách để chứa kết quả Apply
-        List<Apply> applyList = new ArrayList<>();
+        List<ApplyResponse> applyList = new ArrayList<>();
 
         // Duyệt qua danh sách CandidateCv để lấy apply cho từng candidateCvId
         for (CandidateCvResponse candidateCv : candidateCvs) {
             List<Apply> applies = applyRepository.findByCandidateCvId(candidateCv.getCandidateCvId());
-            applyList.addAll(applies);
+            // Chuyển đổi danh sách Apply sang danh sách ApplyResponse
+            List<ApplyResponse> listResponse = applies.stream()
+                    .map(apply -> modelMapper.map(apply, ApplyResponse.class)) // Chuyển đổi Apply thành ApplyResponse
+                    .collect(Collectors.toList());
+            // Thêm tất cả ApplyResponse vào applyList
+            applyList.addAll(listResponse);  // Chuyển đổi rồi thêm vào applyList
         }
         return applyList;
     }
 
     @Override
-    public List<Apply> getAppliesByJobId(Long jobId) {
+    public List<ApplyResponse> getAppliesByJobId(Long jobId) {
         List<Apply> list = applyRepository.findAllByJobId(jobId);
-        return list;
+        // Chuyển đổi danh sách Apply sang danh sách ApplyResponse
+        List<ApplyResponse> listResponse = list.stream()
+                .map(apply -> modelMapper.map(apply, ApplyResponse.class))
+                .collect(Collectors.toList());
+
+        // Trả về danh sách ApplyResponse
+        return listResponse;
     }
 
     @Override
@@ -160,17 +171,22 @@ public class ApplyServiceImpl implements ApplyService {
         return false;
     }
     @Override
-    public List<Apply> getListAppliesByEmployer(Long employerId) {
+    public List<ApplyResponse> getListAppliesByEmployer(Long employerId) {
         // Gọi FeignClient để lấy danh sách CandidateCv dựa trên candidateId
         ResponseEntity<ApiResponse<List<JobResponse>>> response = jobClient.getAllJobByemployerId(employerId);
         List<JobResponse> listApiResponse = response.getBody().getData();
         // Tạo danh sách để chứa kết quả Apply
-        List<Apply> applyList = new ArrayList<>();
+        List<ApplyResponse> applyList = new ArrayList<>();
 
         // Duyệt qua danh sách  để lấy apply cho từng JobId
         for (JobResponse jobResponse : listApiResponse) {
             List<Apply> applies = applyRepository.findAllByJobId(jobResponse.getJobId());
-            applyList.addAll(applies);
+            // Chuyển đổi danh sách Apply sang danh sách ApplyResponse
+            List<ApplyResponse> listResponse = applies.stream()
+                    .map(apply -> modelMapper.map(apply, ApplyResponse.class)) // Chuyển đổi Apply thành ApplyResponse
+                    .collect(Collectors.toList());
+            // Thêm tất cả ApplyResponse vào applyList
+            applyList.addAll(listResponse);  // Chuyển đổi rồi thêm vào applyList
         }
         return applyList;
     }

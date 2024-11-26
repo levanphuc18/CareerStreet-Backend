@@ -1,6 +1,7 @@
 package com.careerstreet.tech_service.service.implement;
 
 import com.careerstreet.tech_service.dto.TechDetailRequest;
+import com.careerstreet.tech_service.dto.TechResponse;
 import com.careerstreet.tech_service.entity.Tech;
 import com.careerstreet.tech_service.entity.TechDetail;
 import com.careerstreet.tech_service.entity.TechDetailId;
@@ -42,9 +43,12 @@ public class TechDetailServiceImpl implements TechDetailService {
     }
 
     @Override
-    public List<Tech> getTechByJobId(Long jobId){
+    public List<TechResponse> getTechByJobId(Long jobId){
         List<Tech> list = techDetailRepository.findTechsByJobId(jobId);
 
-        return list;
+        List<TechResponse> responseList = list.stream()
+                .map(tech -> modelMapper.map(tech, TechResponse.class))
+                .collect(Collectors.toList());
+        return responseList;
     }
 }
