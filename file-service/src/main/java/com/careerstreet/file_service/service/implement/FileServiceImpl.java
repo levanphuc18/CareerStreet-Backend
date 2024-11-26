@@ -1,13 +1,8 @@
 package com.careerstreet.file_service.service.implement;
-
-import com.careerstreet.file_service.entity.FileData;
-import com.careerstreet.file_service.repositoty.FileRepository;
 import com.careerstreet.file_service.service.FileService;
-import com.careerstreet.file_service.util.FileUtils;
 import com.cloudinary.Cloudinary;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -17,16 +12,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
-    private final FileRepository fileRepository;
-
     private final Cloudinary cloudinary;
-
     private final RestTemplate restTemplate;
 
     @Override
