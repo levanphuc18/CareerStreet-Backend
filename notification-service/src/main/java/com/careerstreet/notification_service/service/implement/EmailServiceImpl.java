@@ -12,6 +12,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
@@ -20,31 +22,6 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.mail.username}")
     private String sender;
 //    private String sender = "levanphuc18112001@gmail.com";
-
-//    @Override
-//    public String sendEmail(NotificationRequest notificationRequest){
-//        // Try block to check for exceptions
-//        try {
-//            // Creating a simple mail message
-//            SimpleMailMessage mailMessage
-//                    = new SimpleMailMessage();
-//
-//            // Setting up necessary details
-//            mailMessage.setFrom(sender);
-//            mailMessage.setTo(notificationRequest.getRecipient());
-//            mailMessage.setText(notificationRequest.getMsgBody());
-//            mailMessage.setSubject(notificationRequest.getSubject());
-//
-//            // Sending the mail
-//            javaMailSender.send(mailMessage);
-//            return "Mail Sent Successfully...";
-//        }
-//
-//        // Catch block to handle the exceptions
-//        catch (Exception e) {
-//            return "Error while Sending Mail";
-//        }
-//    }
 
     @Override
     public String sendEmail(NotificationEvent notificationEvent){
@@ -68,6 +45,32 @@ public class EmailServiceImpl implements EmailService {
         // Catch block to handle the exceptions
         catch (Exception e) {
             return "Error while Sending Mail";
+        }
+    }
+    @Override
+    @Async
+    public CompletableFuture<String> sendEmailAsync(NotificationEvent notificationEvent){
+        // Try block to check for exceptions
+        try {
+            // Creating a simple mail message
+            SimpleMailMessage mailMessage
+                    = new SimpleMailMessage();
+
+            // Setting up necessary details
+            mailMessage.setFrom(sender);
+            mailMessage.setTo(notificationEvent.getRecipient());
+            mailMessage.setText(notificationEvent.getMsgBody());
+            mailMessage.setSubject(notificationEvent.getSubject());
+
+            // Sending the mail
+            javaMailSender.send(mailMessage);
+            String result = "Email sent successfully!";
+            return CompletableFuture.completedFuture(result);
+        }
+        // Catch block to handle the exceptions
+        catch (Exception e) {
+            String result = "Error while Sending Mail";
+            return CompletableFuture.completedFuture(result);
         }
     }
 }

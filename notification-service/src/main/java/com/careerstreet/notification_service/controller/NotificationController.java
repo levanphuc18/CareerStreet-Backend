@@ -25,4 +25,14 @@ public class NotificationController {
 
         return "Message sent: " + notificationEvent.getRecipient();
     }
+    @PostMapping("/send-dto-async")
+    public String sendMessageDTOAsync(@RequestBody NotificationEvent notificationEvent) {
+        notificationEvent.setRecipient("rongvua1u8@gmail.com");
+        notificationEvent.setSubject("kafka async");
+        notificationEvent.setMsgBody("test kafka");
+//        kafkaProducerService.sendMessageDTO(notificationEvent);
+        emailService.sendEmailAsync(notificationEvent);
+
+        return "Message sent: " + notificationEvent.getRecipient();
+    }
 }
