@@ -22,4 +22,5 @@ public interface JobService {
     JobResponse updateJobStatus(Long jobId, Long status);
 
     void updateStatusExpiration(Long jobId);
+    List<JobResponse> FillterJob(String title, String location, Long salaryMin, Long salaryMax, String jobType, String jobRank,String companyName);
 }

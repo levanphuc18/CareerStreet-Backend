@@ -109,4 +109,23 @@ public class JobController {
         ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "cap nhat thanh cong trang thai cong viec", jobResponse);
     return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
+    @GetMapping("/fillter")
+    public ResponseEntity <ApiResponse<List<JobResponse>>> FillterJob (
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) Long salaryMin,
+            @RequestParam(required = false) Long salaryMax,
+            @RequestParam(required = false) String jobType,
+            @RequestParam(required = false) String jobRank,
+            @RequestParam(required = false) String companyName
+
+    )
+    {
+        System.out.println("Location: " + location);
+        System.out.println("Controller được gọi");
+        List<JobResponse > jobs = jobService.FillterJob(title, location, salaryMin, salaryMax, jobType, jobRank, companyName);
+
+        ApiResponse<List<JobResponse>> apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Danh sách công filteredJobs việc được lọc",jobs);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

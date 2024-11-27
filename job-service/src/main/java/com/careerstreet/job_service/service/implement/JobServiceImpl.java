@@ -258,4 +258,23 @@ public class JobServiceImpl implements JobService {
         job.setStatus(2L);
         jobRepository.save(job);
     }
+    @Override
+    public List<JobResponse> FillterJob(String title, String location, Long salaryMin, Long salaryMax, String jobType, String jobRank,String companyName)
+    {
+        return jobRepository.filterJobs(title, location, salaryMin, salaryMax, jobType, jobRank,companyName)
+                .stream()
+                .filter(job -> job.getStatus()==1)
+                .map(job ->{
+                    JobResponse response = new JobResponse();
+                    response.setJobId(job.getJobId());
+                    response.setTitle(job.getTitle());
+                    response.setJobLocation(job.getJobLocation());
+                    response.setSalary(job.getSalary());
+                    response.setJobType(job.getJobType());
+                    response.setJobRank(job.getJobRank());
+                    response.setCompanyName(job.getCompanyName());
+                    return response;
+                } )
+                .collect(Collectors.toList());
+    }
 }
