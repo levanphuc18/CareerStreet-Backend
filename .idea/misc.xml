@@ -15,6 +15,7 @@
         <option value="$PROJECT_DIR$/tech-service/pom.xml" />
         <option value="$PROJECT_DIR$/apply-service/pom.xml" />
         <option value="$PROJECT_DIR$/notification-service/pom.xml" />
+        <option value="$PROJECT_DIR$/save-service/pom.xml" />
       </list>
     </option>
   </component>

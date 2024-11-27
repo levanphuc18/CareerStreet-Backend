@@ -11,6 +11,7 @@
         <module name="job-service" />
         <module name="candidate-service" />
         <module name="employer-service" />
+        <module name="save-service" />
         <module name="discovery-server" />
         <module name="user-service" />
         <module name="tech-service" />
@@ -31,6 +32,7 @@
       <module name="file-service" target="19" />
       <module name="job-service" target="19" />
       <module name="notification-service" target="19" />
+      <module name="save-service" target="19" />
       <module name="tech-service" target="19" />
       <module name="user-service" target="19" />
     </bytecodeTargetLevel>
@@ -47,6 +49,7 @@
       <module name="file-service" options="-parameters" />
       <module name="job-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />
+      <module name="save-service" options="-parameters" />
       <module name="tech-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>

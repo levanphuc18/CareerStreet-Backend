@@ -108,6 +108,7 @@ public class GatewayConfig {
                                 ,Constants.JOB_PREFIX+ "/getall/status/{status}"
                                 ,Constants.JOB_PREFIX+ "/get-name/{id}"
                                 ,Constants.JOB_PREFIX+ "/update/{jobId}/jobstatus/{status}"
+                                ,Constants.JOB_PREFIX+ "/fillter"
                         // LEVEL
                                 ,Constants.LEVEL_PREFIX+ "/create"
                                 ,Constants.LEVEL_PREFIX+ "/getall"
@@ -158,6 +159,14 @@ public class GatewayConfig {
                         //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))
                         .uri("lb://notification-service"))
 
+                // Save route
+                .route("save-service", r->r.path(
+                                Constants.SAVE_PREFIX+"/create"
+                        ,Constants.SAVE_PREFIX+"/{candidateId}"
+                        ).and()
+                        .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
+                        //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))
+                        .uri("lb://save-service"))
                 .build();
     }
 }

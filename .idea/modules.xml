@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/file-service/file-service.iml" filepath="$PROJECT_DIR$/file-service/file-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/job-service/job-service.iml" filepath="$PROJECT_DIR$/job-service/job-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/notification-service/notification-service.iml" filepath="$PROJECT_DIR$/notification-service/notification-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/save-service/save-service.iml" filepath="$PROJECT_DIR$/save-service/save-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/tech-service/tech-service.iml" filepath="$PROJECT_DIR$/tech-service/tech-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/user-service/user-service.iml" filepath="$PROJECT_DIR$/user-service/user-service.iml" />
     </modules>
