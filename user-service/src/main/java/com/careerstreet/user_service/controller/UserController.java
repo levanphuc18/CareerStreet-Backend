@@ -89,12 +89,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse); // Trả về apiResponse thay vì list
     }
     @PutMapping("update/is-active")
-    public ResponseEntity<ApiResponse<AccountRes>> updateIsActive(
+    public ResponseEntity<ApiResponse<Boolean>> updateIsActive(
             @RequestParam String username,
             @RequestParam boolean isActive) {
-        AccountRes accountRes = accountService.updateIsActive(username, isActive);
+        System.out.println("update is active t" + isActive);
+        boolean booleanRes = accountService.updateIsActive(username, isActive);
         System.out.println("update is active " + isActive);
-        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Cập nhật trạng thái account thành công", accountRes);
+        ApiResponse apiResponse = new ApiResponse<>(GlobalCode.SUCCESS, "Cập nhật trạng thái account thành công", booleanRes);
 
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }

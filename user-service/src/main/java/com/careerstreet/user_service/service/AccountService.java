@@ -16,5 +16,5 @@ public interface AccountService {
     Long getUserIdByUsername(String username);
     String getEmailByUsername(String username);
     List<AccountRes> getAccountByRole(Long roleId);
-    AccountRes updateIsActive(String username, boolean isActive);
+    boolean updateIsActive(String username, boolean isActive);
 }
