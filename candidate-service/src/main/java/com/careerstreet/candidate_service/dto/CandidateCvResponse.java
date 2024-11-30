@@ -22,7 +22,8 @@ public class CandidateCvResponse {
     String title;
     String currentSalary;
     String preferenceSalary;
-    String level;
+    Long levelId;
+    String levelName;
     String positionType;
     String workLocation;
     String filePath;

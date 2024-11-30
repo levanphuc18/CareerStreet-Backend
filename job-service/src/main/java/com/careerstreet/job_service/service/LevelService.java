@@ -8,4 +8,5 @@ import java.util.List;
 public interface LevelService {
     LevelResponse createLevel(LevelRequest levelRequest);
     List<LevelResponse> getAllLevel();
+    LevelResponse getLevelById(Long levelId);
 }

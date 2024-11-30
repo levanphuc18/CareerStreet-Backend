@@ -112,7 +112,7 @@ public class GatewayConfig {
                         // LEVEL
                                 ,Constants.LEVEL_PREFIX+ "/create"
                                 ,Constants.LEVEL_PREFIX+ "/getall"
-                                ,Constants.LEVEL_PREFIX+ "/get-name/{levelId}"
+                                ,Constants.LEVEL_PREFIX+ "/get-level/{levelId}"
                         ).and()
                         .method(HttpMethod.GET, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT)
                         //.filters(f -> f.filter(applyJwtAuthentication(allowedRoles)))

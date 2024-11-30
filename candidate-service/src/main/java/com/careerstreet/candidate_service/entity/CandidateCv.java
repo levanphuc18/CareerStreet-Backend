@@ -53,8 +53,8 @@ public class CandidateCv {
     @Column(name = "preferenceSalary", nullable = true)
     private String preferenceSalary;
 
-    @Column(name = "level", nullable = true)
-    private String level;
+    @Column(name = "level_id", nullable = true)
+    private Long levelId;
 
     @Column(name = "positionType", nullable = true)
     private String positionType;

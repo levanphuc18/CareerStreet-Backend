@@ -20,7 +20,7 @@ public class CandidateCvRequest {
     String title;
     String currentSalary;
     String preferenceSalary;
-    String level;
+    Long levelId;
     String positionType;
     String workLocation;
     Long candidate_id;

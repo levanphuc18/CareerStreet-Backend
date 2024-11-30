@@ -46,4 +46,10 @@ public class LevelServiceImpl implements LevelService {
         // Trả về danh sách JobResponse
         return levelResponseList;
     }
+    @Override
+    public LevelResponse getLevelById(Long levelId){
+        Level level = levelRepository.findById(levelId).orElseThrow(() -> new RuntimeException("Level not found"));
+        LevelResponse levelResponse = modelMapper.map(level, LevelResponse.class);
+        return levelResponse;
+    }
 }

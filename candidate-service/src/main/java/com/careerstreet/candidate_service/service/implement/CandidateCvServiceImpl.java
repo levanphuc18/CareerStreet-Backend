@@ -2,8 +2,11 @@ package com.careerstreet.candidate_service.service.implement;
 
 //import com.careerstreet.candidate_service.client.CandidateCvClient;
 import com.careerstreet.candidate_service.client.FileClient;
+import com.careerstreet.candidate_service.client.JobClient;
+import com.careerstreet.candidate_service.dto.ApiResponse;
 import com.careerstreet.candidate_service.dto.CandidateCvRequest;
 import com.careerstreet.candidate_service.dto.CandidateCvResponse;
+import com.careerstreet.candidate_service.dto.LevelResponse;
 import com.careerstreet.candidate_service.entity.Candidate;
 import com.careerstreet.candidate_service.entity.CandidateCv;
 import com.careerstreet.candidate_service.exception.EntityNotFoundException;
@@ -30,12 +33,14 @@ public class CandidateCvServiceImpl implements CandidateCvService{
     private final CandidateRepository candidateRepository;
     private final ModelMapper modelMapper;
     private final FileClient fileClient;
+    private final JobClient jobClient;
 
     @Override
     public CandidateCvResponse createCv(CandidateCvRequest candidateCvRequest, MultipartFile file) {
         // Tìm candidate bằng ID
         Candidate candidate = candidateRepository.findById(candidateCvRequest.getCandidate_id())
                 .orElseThrow(() -> new RuntimeException("Candidate not found"));
+        ApiResponse<LevelResponse> levelResponse = jobClient.getLevelById(candidateCvRequest.getLevelId()).getBody();
 
         // Tạo đối tượng CandidateCv mới
         CandidateCv candidateCv = new CandidateCv();
@@ -51,7 +56,7 @@ public class CandidateCvServiceImpl implements CandidateCvService{
         candidateCv.setTitle(candidateCvRequest.getTitle());
         candidateCv.setCurrentSalary(candidateCvRequest.getCurrentSalary());
         candidateCv.setPreferenceSalary(candidateCvRequest.getPreferenceSalary());
-        candidateCv.setLevel(candidateCvRequest.getLevel());
+        candidateCv.setLevelId(candidateCvRequest.getLevelId());
         candidateCv.setPositionType(candidateCvRequest.getPositionType());
         candidateCv.setWorkLocation(candidateCvRequest.getWorkLocation());
 
@@ -78,6 +83,7 @@ public class CandidateCvServiceImpl implements CandidateCvService{
         // Chuyển đổi thực thể CandidateCv thành response DTO
         CandidateCvResponse candidateCvResponse = modelMapper.map(candidateCv, CandidateCvResponse.class);
         candidateCvResponse.setCandidate_id(candidate.getCandidateId());
+        candidateCvResponse.setLevelName(levelResponse.getData().getName());
 
         return candidateCvResponse;
     }
@@ -90,6 +96,7 @@ public class CandidateCvServiceImpl implements CandidateCvService{
         // Tìm candidate bằng ID
         Candidate candidate = candidateRepository.findById(candidateCvRequest.getCandidate_id())
                 .orElseThrow(() -> new RuntimeException("Candidate not found"));
+        ApiResponse<LevelResponse> levelResponse = jobClient.getLevelById(candidateCvRequest.getLevelId()).getBody();
 
         // Map từng trường đơn giản từ CandidateCvRequest
         candidateCv.setFullName(candidateCvRequest.getFullName());
@@ -102,7 +109,7 @@ public class CandidateCvServiceImpl implements CandidateCvService{
         candidateCv.setTitle(candidateCvRequest.getTitle());
         candidateCv.setCurrentSalary(candidateCvRequest.getCurrentSalary());
         candidateCv.setPreferenceSalary(candidateCvRequest.getPreferenceSalary());
-        candidateCv.setLevel(candidateCvRequest.getLevel());
+        candidateCv.setLevelId(candidateCvRequest.getLevelId());
         candidateCv.setPositionType(candidateCvRequest.getPositionType());
         candidateCv.setWorkLocation(candidateCvRequest.getWorkLocation());
 
@@ -127,6 +134,7 @@ public class CandidateCvServiceImpl implements CandidateCvService{
 
         CandidateCvResponse candidateCvResponse = modelMapper.map(candidateCv, CandidateCvResponse.class);
         candidateCvResponse.setCandidate_id(candidate.getCandidateId());
+        candidateCvResponse.setLevelName(levelResponse.getData().getName());
 
         return candidateCvResponse;
     }
@@ -139,6 +147,8 @@ public class CandidateCvServiceImpl implements CandidateCvService{
         CandidateCvResponse candidateCvResponse = modelMapper.map(candidateCv, CandidateCvResponse.class);
         candidateCvResponse.setCandidate_id(candidateCv.getCandidate().getCandidateId());
 
+        ApiResponse<LevelResponse> levelResponse = jobClient.getLevelById(candidateCv.getLevelId()).getBody();
+        candidateCvResponse.setLevelName(levelResponse.getData().getName());
         return candidateCvResponse;
     }
 
